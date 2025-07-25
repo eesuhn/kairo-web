@@ -323,13 +323,23 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({
                 <Calendar className="w-4 h-4" />
                 <span className="font-semibold">
                   {note.created_at &&
-                    note.created_at
-                      .toLocaleDateString('en-GB', {
-                        day: 'numeric',
-                        month: 'short',
-                        year: '2-digit',
-                      })
-                      .replace(/ (\d{2})$/, " '$1")}
+                    (() => {
+                      const date = note.created_at;
+                      const day = date.getDate();
+                      const daySuffix =
+                        day === 1 || day === 21 || day === 31
+                          ? 'st'
+                          : day === 2 || day === 22
+                            ? 'nd'
+                            : day === 3 || day === 23
+                              ? 'rd'
+                              : 'th';
+                      const month = date.toLocaleString('en-GB', {
+                        month: 'long',
+                      });
+                      const year = `'${date.getFullYear().toString().slice(-2)}`;
+                      return `${day}${daySuffix} ${month} ${year}`;
+                    })()}
                 </span>
               </div>
               {note.file_info && (
