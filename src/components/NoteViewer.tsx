@@ -48,22 +48,41 @@ const getReadableEntityLabel = (label: string): string => {
   return labels[label] || label.charAt(0).toUpperCase() + label.slice(1);
 };
 
-const formatExtractiveContent = (extractiveArray: string[]): string[] => {
+const formatExtractiveContent = (
+  extractiveArray: string[],
+  isEdited: boolean = false
+): string => {
   if (!Array.isArray(extractiveArray) || extractiveArray.length === 0)
-    return [];
+    return '';
 
+  // If the note has been edited, or if it's a single-element array (indicating it's already formatted),
+  // just return the content as-is
+  if (
+    isEdited ||
+    (extractiveArray.length === 1 &&
+      !extractiveArray[0].match(/^[^.!?]+[.!?]$/))
+  ) {
+    return extractiveArray.join(' ');
+  }
+
+  // Only apply 3-sentence grouping for initial raw sentence arrays
+  // Join all sentences into one text
   const allText = extractiveArray.join(' ');
+
+  // Split into sentences
   const sentences = allText
     .split(/(?<=[.!?])\s+/)
     .filter((s) => s.trim().length > 0);
-  const paragraphs = [];
 
+  // Group sentences into paragraphs (3 sentences each)
+  const paragraphs = [];
   for (let i = 0; i < sentences.length; i += 3) {
     const paragraph = sentences.slice(i, i + 3).join(' ');
     if (paragraph.trim()) paragraphs.push(paragraph);
   }
 
-  return paragraphs;
+  // Return as a single string with paragraphs separated by double newlines
+  return paragraphs.join('\n\n');
 };
 
 export const NoteViewer: React.FC<NoteViewerProps> = ({
@@ -75,29 +94,99 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({
   const [editedAbstract, setEditedAbstract] = useState(
     note.abstractive_summary
   );
-  const [extractiveParagraphs, setExtractiveParagraphs] = useState<string[]>(
-    []
-  );
+  const [editedExtractive, setEditedExtractive] = useState<string>('');
+
+  // Track what we last saved to avoid unnecessary updates
+  const lastSavedRef = useRef({
+    title: note.title,
+    abstract: note.abstractive_summary,
+    extractive: formatExtractiveContent(
+      note.extractive_summary,
+      note.is_edited
+    ),
+  });
 
   const abstractRef = useRef<HTMLDivElement>(null);
-  const extractiveRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const extractiveRef = useRef<HTMLDivElement>(null);
+  const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Initialize content
   useEffect(() => {
+    const formattedExtractive = formatExtractiveContent(
+      note.extractive_summary,
+      note.is_edited
+    );
     setEditedTitle(note.title);
     setEditedAbstract(note.abstractive_summary);
-    setExtractiveParagraphs(formatExtractiveContent(note.extractive_summary));
-  }, [note]);
+    setEditedExtractive(formattedExtractive);
+
+    // Update our saved reference
+    lastSavedRef.current = {
+      title: note.title,
+      abstract: note.abstractive_summary,
+      extractive: formattedExtractive,
+    };
+  }, [
+    note.id,
+    note.title,
+    note.abstractive_summary,
+    note.extractive_summary,
+    note.is_edited,
+  ]);
+
+  // Update only if content changed externally (not from our own saves)
+  useEffect(() => {
+    // Check if any values changed that we didn't save
+    if (note.title !== lastSavedRef.current.title) {
+      setEditedTitle(note.title);
+      lastSavedRef.current.title = note.title;
+    }
+
+    if (note.abstractive_summary !== lastSavedRef.current.abstract) {
+      setEditedAbstract(note.abstractive_summary);
+      lastSavedRef.current.abstract = note.abstractive_summary;
+    }
+
+    const formattedExtractive = formatExtractiveContent(
+      note.extractive_summary,
+      note.is_edited
+    );
+    if (formattedExtractive !== lastSavedRef.current.extractive) {
+      setEditedExtractive(formattedExtractive);
+      lastSavedRef.current.extractive = formattedExtractive;
+    }
+  }, [
+    note.title,
+    note.abstractive_summary,
+    note.extractive_summary,
+    note.is_edited,
+  ]);
 
   const saveChanges = async (
     title: string,
     abstract: string,
-    extractive?: string[]
+    extractive?: string
   ) => {
+    // Clear any pending save
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+    }
+
+    // Update our reference to what we're saving
+    lastSavedRef.current = {
+      title,
+      abstract,
+      extractive:
+        extractive !== undefined ? extractive : lastSavedRef.current.extractive,
+    };
+
     const updatedNote = {
       ...note,
       title,
       abstractive_summary: abstract,
-      ...(extractive && { extractive_summary: extractive }),
+      ...(extractive !== undefined && {
+        extractive_summary: [extractive],
+      }),
       updated_at: new Date(),
       is_edited: true,
     };
@@ -107,27 +196,19 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({
 
   const handleTitleBlur = () => {
     if (editedTitle !== note.title) {
-      saveChanges(editedTitle, editedAbstract);
+      saveChanges(editedTitle, editedAbstract, editedExtractive);
     }
   };
 
   const handleAbstractBlur = () => {
-    if (editedAbstract !== note.abstractive_summary) {
-      saveChanges(editedTitle, editedAbstract);
+    if (editedAbstract !== lastSavedRef.current.abstract) {
+      saveChanges(editedTitle, editedAbstract, editedExtractive);
     }
   };
 
   const handleExtractiveBlur = () => {
-    const extractiveArray = extractiveParagraphs
-      .join(' ')
-      .split(/(?<=[.!?])\s+/)
-      .filter((s) => s.trim().length > 0);
-
-    if (
-      JSON.stringify(extractiveArray) !==
-      JSON.stringify(note.extractive_summary)
-    ) {
-      saveChanges(editedTitle, editedAbstract, extractiveArray);
+    if (editedExtractive !== lastSavedRef.current.extractive) {
+      saveChanges(editedTitle, editedAbstract, editedExtractive);
     }
   };
 
@@ -276,50 +357,29 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({
             <h2 className="text-xl font-semibold text-white mb-4">
               More Details&nbsp;&nbsp;🔖
             </h2>
-            {extractiveParagraphs.length > 0 ? (
-              <div className="space-y-4 px-2">
-                {extractiveParagraphs.map((paragraph, index) => (
-                  <div
-                    key={index}
-                    ref={(el) => (extractiveRefs.current[index] = el)}
-                    contentEditable
-                    suppressContentEditableWarning
-                    onInput={(e) => {
-                      const element = e.currentTarget;
-                      preserveCursorPosition(element, () => {
-                        const newParagraphs = [...extractiveParagraphs];
-                        newParagraphs[index] = element.textContent || '';
-                        setExtractiveParagraphs(newParagraphs);
-                      });
-                    }}
-                    onBlur={handleExtractiveBlur}
-                    className="text-gray-200 leading-relaxed text-base text-justify outline-none border-none focus:bg-gray-900/20 rounded-lg px-2 py-1 transition-all"
-                    style={{ wordWrap: 'break-word', whiteSpace: 'pre-wrap' }}
-                  >
-                    {paragraph}
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div
-                contentEditable
-                suppressContentEditableWarning
-                onInput={(e) => {
-                  const element = e.currentTarget;
-                  preserveCursorPosition(element, () => {
-                    const text = element.textContent || '';
-                    if (text.trim()) {
-                      setExtractiveParagraphs([text]);
-                    }
-                  });
-                }}
-                onBlur={handleExtractiveBlur}
-                className="text-gray-400 italic outline-none border-none focus:bg-gray-900/20 rounded-lg px-2 py-1 transition-all focus:text-gray-200"
-                style={{ wordWrap: 'break-word', whiteSpace: 'pre-wrap' }}
-              >
-                No detailed content available. Click to add content...
-              </div>
-            )}
+            <div
+              ref={extractiveRef}
+              contentEditable
+              suppressContentEditableWarning
+              onInput={(e) => {
+                const element = e.currentTarget;
+                preserveCursorPosition(element, () => {
+                  setEditedExtractive(element.innerText || '');
+                });
+              }}
+              onBlur={handleExtractiveBlur}
+              className={`w-full bg-transparent leading-relaxed text-base text-justify outline-none border-none focus:bg-gray-900/20 rounded-lg px-2 py-1 transition-all ${
+                editedExtractive ? 'text-gray-200' : 'text-gray-400 italic'
+              }`}
+              style={{
+                wordWrap: 'break-word',
+                whiteSpace: 'pre-wrap',
+                minHeight: '2em',
+              }}
+            >
+              {editedExtractive ||
+                'No detailed content available. Click to add content...'}
+            </div>
           </div>
         </div>
       </div>
