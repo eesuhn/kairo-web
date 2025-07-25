@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Sidebar } from './components/Sidebar';
 import { FileUploadModal } from './components/FileUploadModal';
 import { NoteViewer } from './components/NoteViewer';
@@ -228,7 +228,7 @@ function App() {
           </div>
         </header>
 
-        <div className="flex-1 overflow-hidden min-h-0 flex">
+        <div className="flex-1 overflow-hidden min-h-0 flex relative">
           {showVisualization ? (
             <div className="flex-1 h-full p-6">
               <EntityVisualization
@@ -238,9 +238,7 @@ function App() {
             </div>
           ) : selectedNote ? (
             <>
-              <div
-                className={`transition-all duration-300 ${selectedEntityType ? 'flex-1' : 'w-full'}`}
-              >
+              <div className="w-full">
                 <NoteViewer
                   note={selectedNote}
                   onNoteUpdate={handleNoteUpdate}
@@ -253,6 +251,7 @@ function App() {
                   notes={entityPanelNotes}
                   onClose={() => setSelectedEntityType(null)}
                   onNoteSelect={handleNoteSelect}
+                  overlay
                 />
               )}
             </>

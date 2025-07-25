@@ -46,6 +46,7 @@ interface EntityPanelProps {
   notes: Note[];
   onClose: () => void;
   onNoteSelect: (note: Note) => void;
+  overlay?: boolean;
 }
 
 export const EntityPanel: React.FC<EntityPanelProps> = ({
@@ -53,9 +54,26 @@ export const EntityPanel: React.FC<EntityPanelProps> = ({
   notes,
   onClose,
   onNoteSelect,
+  overlay = false,
 }) => {
   return (
-    <div className="w-80 bg-gray-900/90 backdrop-blur-sm border-l border-gray-700/50 flex flex-col">
+    <div
+      className={`${
+        overlay
+          ? 'fixed right-0 z-40 shadow-2xl animate-slidein bg-gray-900/90 backdrop-blur-sm border-l border-gray-700/50 flex flex-col'
+          : 'w-80 bg-gray-900/90 backdrop-blur-sm border-l border-gray-700/50 flex flex-col'
+      } transition-all duration-300`}
+      style={
+        overlay
+          ? {
+              width: '20rem',
+              minWidth: '20rem',
+              top: '80px',
+              height: 'calc(100vh - 64px)',
+            }
+          : {}
+      }
+    >
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-700/50">
         <h3 className="text-lg font-semibold text-white">
@@ -71,12 +89,12 @@ export const EntityPanel: React.FC<EntityPanelProps> = ({
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto p-4">
-        <div className="mb-3">
+        {/* <div className="mb-3">
           <p className="text-sm text-gray-400">
             {notes.length} note{notes.length !== 1 ? 's' : ''} contain this
             entity type
           </p>
-        </div>
+        </div> */}
 
         <div className="space-y-2">
           {notes.map((note) => (
