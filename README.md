@@ -26,4 +26,4 @@ _Follow the link to access the app_
 
 ---
 
-_the model is hallucinating? feel free to drop a PR or raise an issue [here](https://github.com/eesuhn/kairo-core/issues)!
+_the model is hallucinating? feel free to drop a PR or raise an issue [here](https://github.com/eesuhn/kairo-core/issues)!_
