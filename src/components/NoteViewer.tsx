@@ -203,9 +203,12 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({
             </div>
           </div>
 
-          <div className="border-t border-gray-500 my-10"></div>
+          <div className="border-t border-gray-600 my-10"></div>
 
           <div className="mb-8">
+            <h2 className="text-xl font-semibold text-white mb-4">
+              More Details&nbsp;&nbsp;🔖
+            </h2>
             {extractiveContent.length > 0 ? (
               <div className="space-y-4">
                 {extractiveContent.map((paragraph, index) => (
