@@ -1,5 +1,7 @@
 # ❒ Kairo Core
 
+<img src="https://github.com/user-attachments/assets/0b7f2114-d66e-4ddb-8189-d49f33ba6e4c" alt="screenshot" width="540"><br>
+
 Web app for Kairo — an NLP-powered note taker.
 
 > [!WARNING]
