@@ -187,7 +187,7 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({
 
           <div className="mb-8">
             <h2 className="text-xl font-semibold text-white mb-4">
-              Executive Summary
+              At a Glance&nbsp;&nbsp;👀
             </h2>
             <div
               contentEditable
