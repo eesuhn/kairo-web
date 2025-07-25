@@ -108,7 +108,13 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({
 
   const abstractRef = useRef<HTMLDivElement>(null);
   const extractiveRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLTextAreaElement>(null);
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const adjustTextareaHeight = (textarea: HTMLTextAreaElement) => {
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
+  };
 
   // Initialize content
   useEffect(() => {
@@ -133,6 +139,25 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({
     note.extractive_summary,
     note.is_edited,
   ]);
+
+  // Auto-resize title textarea when content changes
+  useEffect(() => {
+    if (titleRef.current) {
+      adjustTextareaHeight(titleRef.current);
+    }
+  }, [editedTitle]);
+
+  // Initial resize on mount
+  useEffect(() => {
+    if (titleRef.current) {
+      // Use setTimeout to ensure DOM is fully rendered
+      setTimeout(() => {
+        if (titleRef.current) {
+          adjustTextareaHeight(titleRef.current);
+        }
+      }, 0);
+    }
+  }, []);
 
   // Update only if content changed externally (not from our own saves)
   useEffect(() => {
@@ -277,12 +302,20 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({
         <div className="max-w-4xl mx-auto px-8 py-8 pb-16">
           <div className="mb-4 max-w-4xl">
             <textarea
+              ref={titleRef}
               value={editedTitle}
-              onChange={(e) => setEditedTitle(e.target.value)}
+              onChange={(e) => {
+                setEditedTitle(e.target.value);
+                adjustTextareaHeight(e.target);
+              }}
               onBlur={handleTitleBlur}
+              rows={1}
               className="w-full text-4xl font-bold bg-transparent text-white outline-none border-none resize-none placeholder-gray-500 leading-tight break-words max-w-full"
               placeholder="Untitled"
-              rows={1}
+              style={{
+                overflow: 'hidden',
+                height: 'auto',
+              }}
             />
 
             <div className="flex items-center gap-4 mt-6 text-sm text-gray-400">
