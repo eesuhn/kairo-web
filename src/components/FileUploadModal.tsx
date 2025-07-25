@@ -16,7 +16,7 @@ export const FileUploadModal: React.FC<FileUploadModalProps> = ({
 }) => {
   // Close modal when clicking outside of it
   const handleOutsideClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
+    if (e.target === e.currentTarget && !isProcessing) {
       onClose();
     }
   };
