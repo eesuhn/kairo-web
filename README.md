@@ -3,7 +3,7 @@
 Web app for Kairo — an NLP-powered note taker.
 
 > [!WARNING]
-> You must pair this web app with [Kairo Core](https://github.com/eesuhn/kairo-core) to support the NLP features.
+> You must pair this web app with [Kairo Core](https://github.com/eesuhn/kairo-core) to support the NLP features!!!
 
 ## Getting Started
 
