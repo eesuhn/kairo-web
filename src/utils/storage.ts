@@ -27,7 +27,10 @@ class StorageManager {
     });
   }
 
-  private getStore(storeName: string, mode: IDBTransactionMode = 'readonly'): IDBObjectStore {
+  private getStore(
+    storeName: string,
+    mode: IDBTransactionMode = 'readonly'
+  ): IDBObjectStore {
     if (!this.db) throw new Error('Database not initialized');
     const transaction = this.db.transaction([storeName], mode);
     return transaction.objectStore(storeName);
@@ -74,15 +77,17 @@ class StorageManager {
   async searchNotes(query: string): Promise<Note[]> {
     const notes = await this.getAllNotes();
     const normalizedQuery = query.toLowerCase();
-    
-    return notes.filter(note => {
+
+    return notes.filter((note) => {
       const searchText = [
         note.title,
         note.abstractive_summary,
         note.extractive_summary,
-        ...note.entities.map(e => e.text)
-      ].join(' ').toLowerCase();
-      
+        ...note.entities.map((e) => e.text),
+      ]
+        .join(' ')
+        .toLowerCase();
+
       return searchText.includes(normalizedQuery);
     });
   }

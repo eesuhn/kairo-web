@@ -12,37 +12,68 @@ interface NoteViewerProps {
 
 const getReadableEntityLabel = (label: string): string => {
   const labels: Record<string, string> = {
-    'PER': 'Person', 'PERSON': 'Person', 'ORG': 'Organization', 'ORGANIZATION': 'Organization',
-    'LOC': 'Location', 'LOCATION': 'Location', 'GPE': 'Location', 'DATE': 'Date', 'TIME': 'Time',
-    'MONEY': 'Money', 'PERCENT': 'Percentage', 'field': 'Academic Field', 'task': 'Task',
-    'product': 'Product', 'algorithm': 'Algorithm', 'metrics': 'Metrics', 'programlang': 'Programming Language',
-    'conference': 'Conference', 'book': 'Book', 'award': 'Award', 'poem': 'Poem', 'event': 'Event',
-    'magazine': 'Magazine', 'literarygenre': 'Literary Genre', 'discipline': 'Discipline',
-    'enzyme': 'Enzyme', 'protein': 'Protein', 'chemicalelement': 'Chemical Element',
-    'chemicalcompound': 'Chemical Compound', 'astronomicalobject': 'Astronomical Object',
-    'academicjournal': 'Academic Journal', 'theory': 'Theory',
+    PER: 'Person',
+    PERSON: 'Person',
+    ORG: 'Organization',
+    ORGANIZATION: 'Organization',
+    LOC: 'Location',
+    LOCATION: 'Location',
+    GPE: 'Location',
+    DATE: 'Date',
+    TIME: 'Time',
+    MONEY: 'Money',
+    PERCENT: 'Percentage',
+    field: 'Academic Field',
+    task: 'Task',
+    product: 'Product',
+    algorithm: 'Algorithm',
+    metrics: 'Metrics',
+    programlang: 'Programming Language',
+    conference: 'Conference',
+    book: 'Book',
+    award: 'Award',
+    poem: 'Poem',
+    event: 'Event',
+    magazine: 'Magazine',
+    literarygenre: 'Literary Genre',
+    discipline: 'Discipline',
+    enzyme: 'Enzyme',
+    protein: 'Protein',
+    chemicalelement: 'Chemical Element',
+    chemicalcompound: 'Chemical Compound',
+    astronomicalobject: 'Astronomical Object',
+    academicjournal: 'Academic Journal',
+    theory: 'Theory',
   };
   return labels[label] || label.charAt(0).toUpperCase() + label.slice(1);
 };
 
 const formatExtractiveContent = (extractiveArray: string[]): string[] => {
-  if (!Array.isArray(extractiveArray) || extractiveArray.length === 0) return [];
-  
+  if (!Array.isArray(extractiveArray) || extractiveArray.length === 0)
+    return [];
+
   const allText = extractiveArray.join(' ');
-  const sentences = allText.split(/(?<=[.!?])\s+/).filter(s => s.trim().length > 0);
+  const sentences = allText
+    .split(/(?<=[.!?])\s+/)
+    .filter((s) => s.trim().length > 0);
   const paragraphs = [];
-  
+
   for (let i = 0; i < sentences.length; i += 3) {
     const paragraph = sentences.slice(i, i + 3).join(' ');
     if (paragraph.trim()) paragraphs.push(paragraph);
   }
-  
+
   return paragraphs;
 };
-export const NoteViewer: React.FC<NoteViewerProps> = ({ note, onNoteUpdate, onEntityTypeClick }) => {
+export const NoteViewer: React.FC<NoteViewerProps> = ({
+  note,
+  onNoteUpdate,
+  onEntityTypeClick,
+}) => {
   const [editedTitle, setEditedTitle] = useState(note.title);
-  const [editedAbstract, setEditedAbstract] = useState(note.abstractive_summary);
-
+  const [editedAbstract, setEditedAbstract] = useState(
+    note.abstractive_summary
+  );
 
   useEffect(() => {
     setEditedTitle(note.title);
@@ -74,8 +105,12 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({ note, onNoteUpdate, onEn
   };
 
   const entityTypes = new Set<string>();
-  note.entities.forEach(entity => {
-    if (entity.label.toLowerCase() === 'misc' || entity.label.toLowerCase() === 'miscellaneous') return;
+  note.entities.forEach((entity) => {
+    if (
+      entity.label.toLowerCase() === 'misc' ||
+      entity.label.toLowerCase() === 'miscellaneous'
+    )
+      return;
     entityTypes.add(entity.label);
   });
 
@@ -85,7 +120,10 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({ note, onNoteUpdate, onEn
     if (filename.length <= maxLength) return filename;
     const extension = filename.split('.').pop();
     const nameWithoutExt = filename.substring(0, filename.lastIndexOf('.'));
-    const truncatedName = nameWithoutExt.substring(0, maxLength - extension!.length - 4);
+    const truncatedName = nameWithoutExt.substring(
+      0,
+      maxLength - extension!.length - 4
+    );
     return `${truncatedName}...${extension}`;
   };
 
@@ -97,7 +135,7 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({ note, onNoteUpdate, onEn
             <textarea
               value={editedTitle}
               onChange={(e) => {
-              onBlur={handleTitleBlur}
+                onBlur = { handleTitleBlur };
                 setEditedTitle(e.target.value);
                 setHasUnsavedChanges(true);
               }}
@@ -105,7 +143,7 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({ note, onNoteUpdate, onEn
               placeholder="Untitled"
               rows={1}
             />
-            
+
             <div className="flex items-center gap-4 mt-6 text-sm text-gray-400">
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4" />
@@ -121,12 +159,22 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({ note, onNoteUpdate, onEn
 
           {entityTypes.size > 0 && (
             <div className="mb-10">
-              <h2 className="text-lg font-semibold text-white mb-4">Entity Types</h2>
+              <h2 className="text-lg font-semibold text-white mb-4">
+                Entity Types
+              </h2>
               <div className="flex flex-wrap gap-2">
                 {Array.from(entityTypes).map((entityType, index) => (
-                  <button key={index} onClick={() => onEntityTypeClick(entityType)}>
-                    <EntityPill 
-                      entity={{ text: getReadableEntityLabel(entityType), label: entityType, start: 0, end: 0 }} 
+                  <button
+                    key={index}
+                    onClick={() => onEntityTypeClick(entityType)}
+                  >
+                    <EntityPill
+                      entity={{
+                        text: getReadableEntityLabel(entityType),
+                        label: entityType,
+                        start: 0,
+                        end: 0,
+                      }}
                     />
                   </button>
                 ))}
@@ -135,11 +183,15 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({ note, onNoteUpdate, onEn
           )}
 
           <div className="mb-8">
-            <h2 className="text-xl font-semibold text-white mb-6">Executive Summary</h2>
+            <h2 className="text-xl font-semibold text-white mb-6">
+              Executive Summary
+            </h2>
             <div
               contentEditable
               suppressContentEditableWarning
-              onInput={(e) => setEditedAbstract(e.currentTarget.textContent || '')}
+              onInput={(e) =>
+                setEditedAbstract(e.currentTarget.textContent || '')
+              }
               onBlur={handleAbstractBlur}
               className="w-full bg-transparent text-gray-200 leading-relaxed text-lg outline-none border-none min-h-[120px] focus:bg-gray-900/20 rounded-lg p-4 transition-all"
               style={{ wordWrap: 'break-word', whiteSpace: 'pre-wrap' }}
@@ -154,13 +206,18 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({ note, onNoteUpdate, onEn
             {extractiveContent.length > 0 ? (
               <div className="space-y-4">
                 {extractiveContent.map((paragraph, index) => (
-                  <p key={index} className="text-gray-200 leading-relaxed text-base">
+                  <p
+                    key={index}
+                    className="text-gray-200 leading-relaxed text-base"
+                  >
                     {paragraph}
                   </p>
                 ))}
               </div>
             ) : (
-              <div className="text-gray-400 italic">No detailed content available.</div>
+              <div className="text-gray-400 italic">
+                No detailed content available.
+              </div>
             )}
           </div>
         </div>

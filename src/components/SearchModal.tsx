@@ -28,11 +28,11 @@ export const SearchModal: React.FC<SearchModalProps> = ({
     setIsLoading(true);
     try {
       const notes = await storage.searchNotes(searchQuery);
-      const searchResults: SearchResult[] = notes.map(note => ({
-          type: 'note',
-          id: note.id,
-          title: note.title,
-          snippet: note.abstractive_summary.slice(0, 100) + '...',
+      const searchResults: SearchResult[] = notes.map((note) => ({
+        type: 'note',
+        id: note.id,
+        title: note.title,
+        snippet: note.abstractive_summary.slice(0, 100) + '...',
       }));
 
       setResults(searchResults);
@@ -58,11 +58,11 @@ export const SearchModal: React.FC<SearchModalProps> = ({
       switch (e.key) {
         case 'ArrowDown':
           e.preventDefault();
-          setSelectedIndex(prev => Math.min(prev + 1, results.length - 1));
+          setSelectedIndex((prev) => Math.min(prev + 1, results.length - 1));
           break;
         case 'ArrowUp':
           e.preventDefault();
-          setSelectedIndex(prev => Math.max(prev - 1, 0));
+          setSelectedIndex((prev) => Math.max(prev - 1, 0));
           break;
         case 'Enter':
           e.preventDefault();
@@ -126,13 +126,14 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                     onClick={() => handleSelect(result)}
                     className={`
                       w-full flex items-center gap-3 p-4 text-left transition-all
-                      ${index === selectedIndex
-                        ? 'bg-purple-500/20 text-purple-300'
-                        : 'text-gray-300 hover:bg-gray-800/50'
+                      ${
+                        index === selectedIndex
+                          ? 'bg-purple-500/20 text-purple-300'
+                          : 'text-gray-300 hover:bg-gray-800/50'
                       }
                     `}
                   >
-                     <FileText className="w-5 h-5 flex-shrink-0" />
+                    <FileText className="w-5 h-5 flex-shrink-0" />
                     <div className="flex-1 min-w-0">
                       <div className="font-medium truncate">{result.title}</div>
                       {result.snippet && (

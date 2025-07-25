@@ -28,7 +28,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
         >
           <Search className="w-4 h-4" />
           <span className="text-sm">Search notes...</span>
-          <span className="ml-auto text-xs bg-gray-700 px-2 py-1 rounded">⌘K</span>
+          <span className="ml-auto text-xs bg-gray-700 px-2 py-1 rounded">
+            ⌘K
+          </span>
         </button>
       </div>
 
@@ -41,9 +43,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   onClick={() => onNoteSelect(note)}
                   className={`
                     w-full flex items-center gap-3 p-2 rounded-lg transition-all text-left
-                    ${selectedNoteId === note.id
-                      ? 'bg-purple-500/20 text-purple-300'
-                      : 'text-gray-300 hover:bg-gray-800/50 hover:text-white'
+                    ${
+                      selectedNoteId === note.id
+                        ? 'bg-purple-500/20 text-purple-300'
+                        : 'text-gray-300 hover:bg-gray-800/50 hover:text-white'
                     }
                   `}
                 >
@@ -87,10 +90,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {notes.length > 10 && (
           <div>
-            <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wide mb-3">Recent</h2>
+            <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wide mb-3">
+              Recent
+            </h2>
             <div className="space-y-1">
               {notes
-                .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
+                .sort(
+                  (a, b) =>
+                    new Date(b.updated_at).getTime() -
+                    new Date(a.updated_at).getTime()
+                )
                 .slice(0, 3)
                 .map((note) => (
                   <button
@@ -98,9 +107,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     onClick={() => onNoteSelect(note)}
                     className={`
                       w-full flex items-center gap-3 p-2 rounded-lg transition-all text-left
-                      ${selectedNoteId === note.id
-                        ? 'bg-purple-500/20 text-purple-300'
-                        : 'text-gray-300 hover:bg-gray-800/50 hover:text-white'
+                      ${
+                        selectedNoteId === note.id
+                          ? 'bg-purple-500/20 text-purple-300'
+                          : 'text-gray-300 hover:bg-gray-800/50 hover:text-white'
                       }
                     `}
                   >

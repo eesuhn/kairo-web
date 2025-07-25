@@ -4,38 +4,38 @@ import { Note } from '../types';
 
 const getReadableEntityLabel = (label: string): string => {
   const entityLabels: Record<string, string> = {
-    'PER': 'Person',
-    'PERSON': 'Person',
-    'ORG': 'Organization',
-    'ORGANIZATION': 'Organization',
-    'LOC': 'Location',
-    'LOCATION': 'Location',
-    'GPE': 'Location',
-    'DATE': 'Date',
-    'TIME': 'Time',
-    'MONEY': 'Money',
-    'PERCENT': 'Percentage',
-    'field': 'Academic Field',
-    'task': 'Task',
-    'product': 'Product',
-    'algorithm': 'Algorithm',
-    'metrics': 'Metrics',
-    'programlang': 'Programming Language',
-    'conference': 'Conference',
-    'book': 'Book',
-    'award': 'Award',
-    'poem': 'Poem',
-    'event': 'Event',
-    'magazine': 'Magazine',
-    'literarygenre': 'Literary Genre',
-    'discipline': 'Discipline',
-    'enzyme': 'Enzyme',
-    'protein': 'Protein',
-    'chemicalelement': 'Chemical Element',
-    'chemicalcompound': 'Chemical Compound',
-    'astronomicalobject': 'Astronomical Object',
-    'academicjournal': 'Academic Journal',
-    'theory': 'Theory',
+    PER: 'Person',
+    PERSON: 'Person',
+    ORG: 'Organization',
+    ORGANIZATION: 'Organization',
+    LOC: 'Location',
+    LOCATION: 'Location',
+    GPE: 'Location',
+    DATE: 'Date',
+    TIME: 'Time',
+    MONEY: 'Money',
+    PERCENT: 'Percentage',
+    field: 'Academic Field',
+    task: 'Task',
+    product: 'Product',
+    algorithm: 'Algorithm',
+    metrics: 'Metrics',
+    programlang: 'Programming Language',
+    conference: 'Conference',
+    book: 'Book',
+    award: 'Award',
+    poem: 'Poem',
+    event: 'Event',
+    magazine: 'Magazine',
+    literarygenre: 'Literary Genre',
+    discipline: 'Discipline',
+    enzyme: 'Enzyme',
+    protein: 'Protein',
+    chemicalelement: 'Chemical Element',
+    chemicalcompound: 'Chemical Compound',
+    astronomicalobject: 'Astronomical Object',
+    academicjournal: 'Academic Journal',
+    theory: 'Theory',
   };
 
   return entityLabels[label] || label.charAt(0).toUpperCase() + label.slice(1);
@@ -73,10 +73,11 @@ export const EntityPanel: React.FC<EntityPanelProps> = ({
       <div className="flex-1 overflow-y-auto p-4">
         <div className="mb-3">
           <p className="text-sm text-gray-400">
-            {notes.length} note{notes.length !== 1 ? 's' : ''} contain this entity type
+            {notes.length} note{notes.length !== 1 ? 's' : ''} contain this
+            entity type
           </p>
         </div>
-        
+
         <div className="space-y-2">
           {notes.map((note) => (
             <button

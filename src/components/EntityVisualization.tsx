@@ -4,38 +4,38 @@ import { Note, Entity } from '../types';
 
 const getReadableEntityLabel = (label: string): string => {
   const entityLabels: Record<string, string> = {
-    'PER': 'Person',
-    'PERSON': 'Person',
-    'ORG': 'Organization',
-    'ORGANIZATION': 'Organization',
-    'LOC': 'Location',
-    'LOCATION': 'Location',
-    'GPE': 'Location',
-    'DATE': 'Date',
-    'TIME': 'Time',
-    'MONEY': 'Money',
-    'PERCENT': 'Percentage',
-    'field': 'Academic Field',
-    'task': 'Task',
-    'product': 'Product',
-    'algorithm': 'Algorithm',
-    'metrics': 'Metrics',
-    'programlang': 'Programming Language',
-    'conference': 'Conference',
-    'book': 'Book',
-    'award': 'Award',
-    'poem': 'Poem',
-    'event': 'Event',
-    'magazine': 'Magazine',
-    'literarygenre': 'Literary Genre',
-    'discipline': 'Discipline',
-    'enzyme': 'Enzyme',
-    'protein': 'Protein',
-    'chemicalelement': 'Chemical Element',
-    'chemicalcompound': 'Chemical Compound',
-    'astronomicalobject': 'Astronomical Object',
-    'academicjournal': 'Academic Journal',
-    'theory': 'Theory',
+    PER: 'Person',
+    PERSON: 'Person',
+    ORG: 'Organization',
+    ORGANIZATION: 'Organization',
+    LOC: 'Location',
+    LOCATION: 'Location',
+    GPE: 'Location',
+    DATE: 'Date',
+    TIME: 'Time',
+    MONEY: 'Money',
+    PERCENT: 'Percentage',
+    field: 'Academic Field',
+    task: 'Task',
+    product: 'Product',
+    algorithm: 'Algorithm',
+    metrics: 'Metrics',
+    programlang: 'Programming Language',
+    conference: 'Conference',
+    book: 'Book',
+    award: 'Award',
+    poem: 'Poem',
+    event: 'Event',
+    magazine: 'Magazine',
+    literarygenre: 'Literary Genre',
+    discipline: 'Discipline',
+    enzyme: 'Enzyme',
+    protein: 'Protein',
+    chemicalelement: 'Chemical Element',
+    chemicalcompound: 'Chemical Compound',
+    astronomicalobject: 'Astronomical Object',
+    academicjournal: 'Academic Journal',
+    theory: 'Theory',
   };
 
   return entityLabels[label] || label.charAt(0).toUpperCase() + label.slice(1);
@@ -66,7 +66,9 @@ export const EntityVisualization: React.FC<EntityVisualizationProps> = ({
   onNoteSelect,
 }) => {
   const svgRef = useRef<SVGSVGElement>(null);
-  const [selectedEntityType, setSelectedEntityType] = useState<string | null>(null);
+  const [selectedEntityType, setSelectedEntityType] = useState<string | null>(
+    null
+  );
   const [relatedNotes, setRelatedNotes] = useState<Note[]>([]);
 
   useEffect(() => {
@@ -84,21 +86,29 @@ export const EntityVisualization: React.FC<EntityVisualizationProps> = ({
     const entityTypeCounts = new Map<string, number>();
 
     // Add note nodes
-    notes.forEach(note => {
+    notes.forEach((note) => {
       nodes.push({
         id: `note-${note.id}`,
         type: 'note',
-        label: note.title.length > 25 ? note.title.slice(0, 25) + '...' : note.title,
+        label:
+          note.title.length > 25 ? note.title.slice(0, 25) + '...' : note.title,
         note,
       });
 
       // Count entity types and create links
-      note.entities.forEach(entity => {
+      note.entities.forEach((entity) => {
         const entityType = entity.label;
         // Skip miscellaneous entities
-        if (entityType.toLowerCase() === 'misc' || entityType.toLowerCase() === 'miscellaneous') return;
-        
-        entityTypeCounts.set(entityType, (entityTypeCounts.get(entityType) || 0) + 1);
+        if (
+          entityType.toLowerCase() === 'misc' ||
+          entityType.toLowerCase() === 'miscellaneous'
+        )
+          return;
+
+        entityTypeCounts.set(
+          entityType,
+          (entityTypeCounts.get(entityType) || 0) + 1
+        );
 
         // Add link between note and entity type
         links.push({
@@ -123,31 +133,41 @@ export const EntityVisualization: React.FC<EntityVisualizationProps> = ({
     });
 
     // Filter links to only include entity types that appear multiple times
-    const filteredLinks = links.filter(link => 
-      nodes.some(node => node.id === link.target)
+    const filteredLinks = links.filter((link) =>
+      nodes.some((node) => node.id === link.target)
     );
 
     // Create SVG with zoom behavior
     const g = svg
       .attr('width', width)
       .attr('height', height)
-      .call(d3.zoom<SVGSVGElement, unknown>()
-        .scaleExtent([0.1, 4])
-        .on('zoom', (event) => {
-          g.attr('transform', event.transform);
-        }) as any
+      .call(
+        d3
+          .zoom<SVGSVGElement, unknown>()
+          .scaleExtent([0.1, 4])
+          .on('zoom', (event) => {
+            g.attr('transform', event.transform);
+          }) as any
       )
       .append('g');
 
     // Create simulation
-    const simulation = d3.forceSimulation(nodes)
-      .force('link', d3.forceLink(filteredLinks).id((d: any) => d.id).strength(0.2))
+    const simulation = d3
+      .forceSimulation(nodes)
+      .force(
+        'link',
+        d3
+          .forceLink(filteredLinks)
+          .id((d: any) => d.id)
+          .strength(0.2)
+      )
       .force('charge', d3.forceManyBody().strength(-400))
       .force('center', d3.forceCenter(width / 2, height / 2))
       .force('collision', d3.forceCollide().radius(40));
 
     // Create links
-    const link = g.append('g')
+    const link = g
+      .append('g')
       .selectAll('line')
       .data(filteredLinks)
       .enter()
@@ -157,87 +177,93 @@ export const EntityVisualization: React.FC<EntityVisualizationProps> = ({
       .attr('stroke-width', 2);
 
     // Create nodes
-    const node = g.append('g')
+    const node = g
+      .append('g')
       .selectAll('g')
       .data(nodes)
       .enter()
       .append('g')
       .style('cursor', 'pointer')
-      .call(d3.drag<SVGGElement, Node>()
-        .on('start', (event, d) => {
-          if (!event.active) simulation.alphaTarget(0.3).restart();
-          d.fx = d.x;
-          d.fy = d.y;
-        })
-        .on('drag', (event, d) => {
-          d.fx = event.x;
-          d.fy = event.y;
-        })
-        .on('end', (event, d) => {
-          if (!event.active) simulation.alphaTarget(0);
-          d.fx = null;
-          d.fy = null;
-        })
+      .call(
+        d3
+          .drag<SVGGElement, Node>()
+          .on('start', (event, d) => {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+          })
+          .on('drag', (event, d) => {
+            d.fx = event.x;
+            d.fy = event.y;
+          })
+          .on('end', (event, d) => {
+            if (!event.active) simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+          })
       );
 
     // Add circles
-    node.append('circle')
-      .attr('r', (d: Node) => d.type === 'note' ? 15 : 12)
+    node
+      .append('circle')
+      .attr('r', (d: Node) => (d.type === 'note' ? 15 : 12))
       .attr('fill', (d: Node) => {
         if (d.type === 'note') return '#8B5CF6';
-        
+
         const colors: Record<string, string> = {
-          'PER': '#3B82F6',
-          'PERSON': '#3B82F6',
-          'ORG': '#10B981',
-          'ORGANIZATION': '#10B981',
-          'LOC': '#8B5CF6',
-          'LOCATION': '#8B5CF6',
-          'GPE': '#8B5CF6',
-          'DATE': '#F59E0B',
-          'TIME': '#F97316',
-          'MONEY': '#EAB308',
-          'PERCENT': '#EC4899',
-          'field': '#6366F1',
-          'task': '#06B6D4',
-          'product': '#14B8A6',
-          'algorithm': '#8B5CF6',
-          'metrics': '#F43F5E',
-          'programlang': '#0EA5E9',
-          'conference': '#84CC16',
-          'book': '#D946EF',
-          'award': '#FACC15',
-          'poem': '#F472B6',
-          'event': '#EF4444',
-          'magazine': '#22C55E',
-          'literarygenre': '#A855F7',
-          'discipline': '#3B82F6',
-          'enzyme': '#059669',
-          'protein': '#0D9488',
-          'chemicalelement': '#EA580C',
-          'chemicalcompound': '#D97706',
-          'astronomicalobject': '#4F46E5',
-          'academicjournal': '#0891B2',
-          'theory': '#7C3AED',
+          PER: '#3B82F6',
+          PERSON: '#3B82F6',
+          ORG: '#10B981',
+          ORGANIZATION: '#10B981',
+          LOC: '#8B5CF6',
+          LOCATION: '#8B5CF6',
+          GPE: '#8B5CF6',
+          DATE: '#F59E0B',
+          TIME: '#F97316',
+          MONEY: '#EAB308',
+          PERCENT: '#EC4899',
+          field: '#6366F1',
+          task: '#06B6D4',
+          product: '#14B8A6',
+          algorithm: '#8B5CF6',
+          metrics: '#F43F5E',
+          programlang: '#0EA5E9',
+          conference: '#84CC16',
+          book: '#D946EF',
+          award: '#FACC15',
+          poem: '#F472B6',
+          event: '#EF4444',
+          magazine: '#22C55E',
+          literarygenre: '#A855F7',
+          discipline: '#3B82F6',
+          enzyme: '#059669',
+          protein: '#0D9488',
+          chemicalelement: '#EA580C',
+          chemicalcompound: '#D97706',
+          astronomicalobject: '#4F46E5',
+          academicjournal: '#0891B2',
+          theory: '#7C3AED',
         };
-        
+
         return colors[d.entityType || ''] || '#6B7280';
       })
       .attr('stroke', '#fff')
       .attr('stroke-width', 2);
 
     // Add labels
-    node.append('text')
+    node
+      .append('text')
       .text((d: Node) => d.label)
       .attr('dy', -25)
       .attr('text-anchor', 'middle')
       .attr('fill', '#D1D5DB')
       .attr('font-size', '11px')
-      .attr('font-weight', (d: Node) => d.type === 'note' ? 'bold' : 'normal')
+      .attr('font-weight', (d: Node) => (d.type === 'note' ? 'bold' : 'normal'))
       .style('pointer-events', 'none');
 
     // Add count labels for entity types
-    node.filter((d: Node) => d.type === 'entity' && d.count)
+    node
+      .filter((d: Node) => d.type === 'entity' && d.count)
       .append('text')
       .text((d: Node) => d.count?.toString() || '')
       .attr('dy', 4)
@@ -253,26 +279,29 @@ export const EntityVisualization: React.FC<EntityVisualizationProps> = ({
         onNoteSelect(d.note);
       } else if (d.type === 'entity' && d.entityType) {
         setSelectedEntityType(d.entityType);
-        const notesWithEntity = notes.filter(note => 
-          note.entities.some(entity => entity.label === d.entityType)
+        const notesWithEntity = notes.filter((note) =>
+          note.entities.some((entity) => entity.label === d.entityType)
         );
         setRelatedNotes(notesWithEntity);
       }
     });
 
     // Add hover effects
-    node.on('mouseenter', function(event, d) {
-      d3.select(this).select('circle')
-        .transition()
-        .duration(200)
-        .attr('r', (d: Node) => (d.type === 'note' ? 15 : 12) * 1.2);
-    })
-    .on('mouseleave', function(event, d) {
-      d3.select(this).select('circle')
-        .transition()
-        .duration(200)
-        .attr('r', (d: Node) => d.type === 'note' ? 15 : 12);
-    });
+    node
+      .on('mouseenter', function (event, d) {
+        d3.select(this)
+          .select('circle')
+          .transition()
+          .duration(200)
+          .attr('r', (d: Node) => (d.type === 'note' ? 15 : 12) * 1.2);
+      })
+      .on('mouseleave', function (event, d) {
+        d3.select(this)
+          .select('circle')
+          .transition()
+          .duration(200)
+          .attr('r', (d: Node) => (d.type === 'note' ? 15 : 12));
+      });
 
     // Update positions on simulation tick
     simulation.on('tick', () => {
@@ -282,8 +311,7 @@ export const EntityVisualization: React.FC<EntityVisualizationProps> = ({
         .attr('x2', (d: any) => d.target.x)
         .attr('y2', (d: any) => d.target.y);
 
-      node
-        .attr('transform', (d: any) => `translate(${d.x}, ${d.y})`);
+      node.attr('transform', (d: any) => `translate(${d.x}, ${d.y})`);
     });
 
     return () => {
@@ -296,7 +324,9 @@ export const EntityVisualization: React.FC<EntityVisualizationProps> = ({
       <div className="flex items-center justify-center h-full text-gray-400">
         <div className="text-center">
           <p className="text-lg mb-2">No notes to visualize</p>
-          <p className="text-sm">Upload some files to see entity relationships</p>
+          <p className="text-sm">
+            Upload some files to see entity relationships
+          </p>
         </div>
       </div>
     );
@@ -305,12 +335,15 @@ export const EntityVisualization: React.FC<EntityVisualizationProps> = ({
   return (
     <div className="w-full h-full bg-gray-900/40 backdrop-blur-sm rounded-2xl border border-gray-700/50 p-6">
       <div className="mb-6">
-        <h2 className="text-xl font-semibold text-white mb-2">Entity Type Relationships</h2>
+        <h2 className="text-xl font-semibold text-white mb-2">
+          Entity Type Relationships
+        </h2>
         <p className="text-sm text-gray-400">
-          Interactive visualization showing connections between notes and shared entity types
+          Interactive visualization showing connections between notes and shared
+          entity types
         </p>
       </div>
-      
+
       <div className="flex gap-6 h-full">
         {/* Visualization */}
         <div className="flex-1 overflow-hidden rounded-xl bg-gray-950/50">
@@ -364,7 +397,8 @@ export const EntityVisualization: React.FC<EntityVisualizationProps> = ({
           <span>Entity Types</span>
         </div>
         <div className="ml-auto">
-          Click notes to view • Click entity types to see related notes • Drag to reposition • Scroll to zoom
+          Click notes to view • Click entity types to see related notes • Drag
+          to reposition • Scroll to zoom
         </div>
       </div>
     </div>

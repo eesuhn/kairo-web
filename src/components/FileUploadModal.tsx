@@ -34,10 +34,7 @@ export const FileUploadModal: React.FC<FileUploadModalProps> = ({
 
         {/* Content */}
         <div className="p-6">
-          <FileUpload
-            onFileUpload={onFileUpload}
-            isProcessing={isProcessing}
-          />
+          <FileUpload onFileUpload={onFileUpload} isProcessing={isProcessing} />
         </div>
       </div>
     </div>

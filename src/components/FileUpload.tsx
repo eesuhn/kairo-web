@@ -38,7 +38,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setError(null);
-    
+
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       validateAndUpload(file);
@@ -63,7 +63,9 @@ export const FileUpload: React.FC<FileUploadProps> = ({
     ];
 
     if (!allowedTypes.includes(file.type)) {
-      setError('Unsupported file type. Please upload PDF, DOC, DOCX, TXT, MD, or CSV files.');
+      setError(
+        'Unsupported file type. Please upload PDF, DOC, DOCX, TXT, MD, or CSV files.'
+      );
       return;
     }
 
@@ -75,9 +77,10 @@ export const FileUpload: React.FC<FileUploadProps> = ({
       <div
         className={`
           relative border-2 border-dashed rounded-xl p-8 text-center transition-all
-          ${dragActive
-            ? 'border-purple-400 bg-purple-500/10'
-            : 'border-gray-600 hover:border-gray-500'
+          ${
+            dragActive
+              ? 'border-purple-400 bg-purple-500/10'
+              : 'border-gray-600 hover:border-gray-500'
           }
           ${isProcessing ? 'opacity-50 pointer-events-none' : ''}
         `}
@@ -99,8 +102,12 @@ export const FileUpload: React.FC<FileUploadProps> = ({
           {isProcessing ? (
             <>
               <div className="animate-spin rounded-full h-12 w-12 border-2 border-purple-500 border-t-transparent" />
-              <div className="text-white font-medium">Processing your file...</div>
-              <div className="text-gray-400 text-sm">This may take a few moments</div>
+              <div className="text-white font-medium">
+                Processing your file...
+              </div>
+              <div className="text-gray-400 text-sm">
+                This may take a few moments
+              </div>
             </>
           ) : (
             <>
