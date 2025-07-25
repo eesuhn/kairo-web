@@ -91,7 +91,7 @@ export const EntityPanel: React.FC<EntityPanelProps> = ({
                   <div className="font-medium text-white text-sm truncate group-hover:text-purple-300 transition-colors">
                     {note.title}
                   </div>
-                  <div className="text-xs text-gray-400 mt-1 line-clamp-2">
+                  <div className="text-xs text-gray-400 mt-1 line-clamp-2 text-justify">
                     {note.abstractive_summary.slice(0, 100)}...
                   </div>
                   <div className="text-xs text-gray-500 mt-2">

@@ -13,6 +13,38 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   const [dragActive, setDragActive] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const validateAndUpload = useCallback(
+    (file: File) => {
+      // Check file size (50MB limit)
+      if (file.size > 50 * 1024 * 1024) {
+        setError('File size must be less than 50MB');
+        return;
+      }
+
+      // Check file type
+      const allowedTypes = [
+        'text/plain',
+        'application/pdf',
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'text/markdown',
+        'text/csv',
+        'audio/mpeg',
+        'audio/wav',
+      ];
+
+      if (!allowedTypes.includes(file.type)) {
+        setError(
+          'Unsupported file type. Please upload PDF, DOC, DOCX, or Audio files.'
+        );
+        return;
+      }
+
+      onFileUpload(file);
+    },
+    [onFileUpload]
+  );
+
   const handleDrag = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -23,56 +55,33 @@ export const FileUpload: React.FC<FileUploadProps> = ({
     }
   }, []);
 
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-    setError(null);
+  const handleDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setDragActive(false);
+      setError(null);
 
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      const file = e.dataTransfer.files[0];
-      validateAndUpload(file);
-    }
-  }, []);
+      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+        const file = e.dataTransfer.files[0];
+        validateAndUpload(file);
+      }
+    },
+    [validateAndUpload]
+  );
 
-  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setError(null);
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      e.preventDefault();
+      setError(null);
 
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      validateAndUpload(file);
-    }
-  }, []);
-
-  const validateAndUpload = (file: File) => {
-    // Check file size (50MB limit)
-    if (file.size > 50 * 1024 * 1024) {
-      setError('File size must be less than 50MB');
-      return;
-    }
-
-    // Check file type
-    const allowedTypes = [
-      'text/plain',
-      'application/pdf',
-      'application/msword',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      'text/markdown',
-      'text/csv',
-      'audio/mpeg',
-      'audio/wav',
-    ];
-
-    if (!allowedTypes.includes(file.type)) {
-      setError(
-        'Unsupported file type. Please upload PDF, DOC, DOCX, or Audio files.'
-      );
-      return;
-    }
-
-    onFileUpload(file);
-  };
+      if (e.target.files && e.target.files[0]) {
+        const file = e.target.files[0];
+        validateAndUpload(file);
+      }
+    },
+    [validateAndUpload]
+  );
 
   return (
     <div className="w-full">

@@ -196,7 +196,7 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({
                 setEditedAbstract(e.currentTarget.textContent || '')
               }
               onBlur={handleAbstractBlur}
-              className="w-full bg-transparent text-gray-200 leading-relaxed text-lg outline-none border-none focus:bg-gray-900/20 rounded-lg px-2 transition-all"
+              className="w-full bg-transparent text-gray-200 leading-relaxed text-lg outline-none border-none focus:bg-gray-900/20 rounded-lg px-2 transition-all text-justify"
               style={{ wordWrap: 'break-word', whiteSpace: 'pre-wrap' }}
             >
               {editedAbstract || 'Executive summary will appear here...'}
@@ -210,11 +210,11 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({
               More Details&nbsp;&nbsp;🔖
             </h2>
             {extractiveContent.length > 0 ? (
-              <div className="space-y-4">
+              <div className="space-y-4 px-2">
                 {extractiveContent.map((paragraph, index) => (
                   <p
                     key={index}
-                    className="text-gray-200 leading-relaxed text-base"
+                    className="text-gray-200 leading-relaxed text-base text-justify"
                   >
                     {paragraph}
                   </p>

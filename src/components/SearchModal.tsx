@@ -51,6 +51,17 @@ export const SearchModal: React.FC<SearchModalProps> = ({
     return () => clearTimeout(delayedSearch);
   }, [query, performSearch]);
 
+  const handleSelect = useCallback(
+    async (result: SearchResult) => {
+      const note = await storage.getNote(result.id);
+      if (note) {
+        onNoteSelect(note);
+      }
+      onClose();
+    },
+    [onNoteSelect, onClose]
+  );
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!isOpen) return;
@@ -78,15 +89,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, results, selectedIndex, onClose]);
-
-  const handleSelect = async (result: SearchResult) => {
-    const note = await storage.getNote(result.id);
-    if (note) {
-      onNoteSelect(note);
-    }
-    onClose();
-  };
+  }, [isOpen, results, selectedIndex, onClose, handleSelect]);
 
   if (!isOpen) return null;
 
