@@ -333,22 +333,34 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({
             <h2 className="text-xl font-semibold text-white mb-4">
               At a Glance&nbsp;&nbsp;👀
             </h2>
-            <div
-              ref={abstractRef}
-              contentEditable
-              suppressContentEditableWarning
-              onInput={(e) => {
-                const element = e.currentTarget;
-                preserveCursorPosition(element, () => {
-                  setEditedAbstract(element.textContent || '');
-                });
-              }}
-              onBlur={handleAbstractBlur}
-              className="w-full bg-transparent text-gray-200 leading-relaxed text-lg outline-none border-none focus:bg-gray-900/20 rounded-lg px-2 transition-all text-justify"
-              style={{ wordWrap: 'break-word', whiteSpace: 'pre-wrap' }}
-            >
-              {editedAbstract || 'Executive summary will appear here...'}
-            </div>
+            {editedAbstract ? (
+              <div
+                ref={abstractRef}
+                contentEditable
+                suppressContentEditableWarning
+                onInput={(e) => {
+                  const element = e.currentTarget;
+                  preserveCursorPosition(element, () => {
+                    setEditedAbstract(element.textContent || '');
+                  });
+                }}
+                onBlur={handleAbstractBlur}
+                className="w-full bg-transparent text-gray-200 leading-relaxed text-lg outline-none border-none focus:bg-gray-900/20 rounded-lg px-2 transition-all text-justify"
+                style={{ wordWrap: 'break-word', whiteSpace: 'pre-wrap' }}
+              >
+                {editedAbstract}
+              </div>
+            ) : (
+              <div
+                onClick={() => {
+                  setEditedAbstract(' ');
+                  setTimeout(() => abstractRef.current?.focus(), 0);
+                }}
+                className="w-full bg-transparent text-gray-400 italic leading-relaxed text-lg outline-none border-none hover:bg-gray-900/20 rounded-lg px-2 transition-all text-justify cursor-text"
+              >
+                Executive summary will appear here...
+              </div>
+            )}
           </div>
 
           <div className="border-t border-gray-600 my-10"></div>
@@ -357,29 +369,43 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({
             <h2 className="text-xl font-semibold text-white mb-4">
               More Details&nbsp;&nbsp;🔖
             </h2>
-            <div
-              ref={extractiveRef}
-              contentEditable
-              suppressContentEditableWarning
-              onInput={(e) => {
-                const element = e.currentTarget;
-                preserveCursorPosition(element, () => {
-                  setEditedExtractive(element.innerText || '');
-                });
-              }}
-              onBlur={handleExtractiveBlur}
-              className={`w-full bg-transparent leading-relaxed text-base text-justify outline-none border-none focus:bg-gray-900/20 rounded-lg px-2 py-1 transition-all ${
-                editedExtractive ? 'text-gray-200' : 'text-gray-400 italic'
-              }`}
-              style={{
-                wordWrap: 'break-word',
-                whiteSpace: 'pre-wrap',
-                minHeight: '2em',
-              }}
-            >
-              {editedExtractive ||
-                'No detailed content available. Click to add content...'}
-            </div>
+            {editedExtractive ? (
+              <div
+                ref={extractiveRef}
+                contentEditable
+                suppressContentEditableWarning
+                onInput={(e) => {
+                  const element = e.currentTarget;
+                  preserveCursorPosition(element, () => {
+                    setEditedExtractive(element.innerText || '');
+                  });
+                }}
+                onBlur={handleExtractiveBlur}
+                className="w-full bg-transparent leading-relaxed text-base text-justify outline-none border-none focus:bg-gray-900/20 rounded-lg px-2 py-1 transition-all text-gray-200"
+                style={{
+                  wordWrap: 'break-word',
+                  whiteSpace: 'pre-wrap',
+                  minHeight: '2em',
+                }}
+              >
+                {editedExtractive}
+              </div>
+            ) : (
+              <div
+                onClick={() => {
+                  setEditedExtractive(' ');
+                  setTimeout(() => extractiveRef.current?.focus(), 0);
+                }}
+                className="w-full bg-transparent text-gray-400 italic leading-relaxed text-base text-justify outline-none border-none hover:bg-gray-900/20 rounded-lg px-2 py-1 transition-all cursor-text"
+                style={{
+                  wordWrap: 'break-word',
+                  whiteSpace: 'pre-wrap',
+                  minHeight: '2em',
+                }}
+              >
+                No detailed content available. Click to add content...
+              </div>
+            )}
           </div>
         </div>
       </div>
