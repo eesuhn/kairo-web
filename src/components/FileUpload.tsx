@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { Upload, FileText, AlertCircle } from 'lucide-react';
+import { Upload, AlertCircle } from 'lucide-react';
 
 interface FileUploadProps {
   onFileUpload: (file: File) => void;
@@ -60,11 +60,13 @@ export const FileUpload: React.FC<FileUploadProps> = ({
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
       'text/markdown',
       'text/csv',
+      'audio/mpeg',
+      'audio/wav',
     ];
 
     if (!allowedTypes.includes(file.type)) {
       setError(
-        'Unsupported file type. Please upload PDF, DOC, DOCX, TXT, MD, or CSV files.'
+        'Unsupported file type. Please upload PDF, DOC, DOCX, or Audio files.'
       );
       return;
     }
@@ -94,7 +96,6 @@ export const FileUpload: React.FC<FileUploadProps> = ({
           id="file-upload"
           className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
           onChange={handleChange}
-          accept=".pdf,.doc,.docx,.txt,.md,.csv"
           disabled={isProcessing}
         />
 
@@ -133,20 +134,6 @@ export const FileUpload: React.FC<FileUploadProps> = ({
           </div>
         </div>
       )}
-
-      <div className="mt-6 text-xs text-gray-500">
-        <div className="flex items-center gap-2 mb-2">
-          <FileText className="w-3 h-3" />
-          <span>Supported formats:</span>
-        </div>
-        <div className="grid grid-cols-2 gap-1 ml-5">
-          <span>• PDF documents</span>
-          <span>• Word documents</span>
-          <span>• Plain text files</span>
-          <span>• Markdown files</span>
-          <span>• CSV files</span>
-        </div>
-      </div>
     </div>
   );
 };

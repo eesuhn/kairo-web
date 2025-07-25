@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Search, X, FileText, Folder } from 'lucide-react';
+import { Search, X, FileText } from 'lucide-react';
 import { Note, SearchResult } from '../types';
 import { storage } from '../utils/storage';
 
@@ -100,7 +100,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search notes and folders..."
+              placeholder="Search notes..."
               className="flex-1 bg-transparent text-white placeholder-gray-400 outline-none text-lg"
               autoFocus
             />

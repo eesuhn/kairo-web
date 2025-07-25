@@ -21,7 +21,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <div className="w-80 bg-gray-900/80 backdrop-blur-sm border-r border-gray-700/50 flex flex-col">
-      <div className="p-6 border-b border-gray-700/50">
+      <div className="px-6 py-4 border-b border-gray-700/50">
         <button
           onClick={onSearch}
           className="w-full flex items-center gap-3 p-3 bg-gray-800/50 hover:bg-gray-800/70 rounded-xl transition-all text-gray-300 hover:text-white"
@@ -42,7 +42,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <button
                   onClick={() => onNoteSelect(note)}
                   className={`
-                    w-full flex items-center gap-3 p-2 rounded-lg transition-all text-left
+                    w-full flex items-center gap-3 p-4 rounded-lg transition-all text-left
                     ${
                       selectedNoteId === note.id
                         ? 'bg-purple-500/20 text-purple-300'

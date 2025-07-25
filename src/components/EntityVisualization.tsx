@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
-import { Note, Entity } from '../types';
+import { Note } from '../types';
 
 const getReadableEntityLabel = (label: string): string => {
   const entityLabels: Record<string, string> = {
@@ -55,7 +55,7 @@ interface Node extends d3.SimulationNodeDatum {
   count?: number;
 }
 
-interface Link {
+interface Link extends d3.SimulationLinkDatum<Node> {
   source: string | Node;
   target: string | Node;
   strength: number;
@@ -147,23 +147,23 @@ export const EntityVisualization: React.FC<EntityVisualizationProps> = ({
           .scaleExtent([0.1, 4])
           .on('zoom', (event) => {
             g.attr('transform', event.transform);
-          }) as any
+          })
       )
       .append('g');
 
     // Create simulation
     const simulation = d3
-      .forceSimulation(nodes)
+      .forceSimulation<Node>(nodes)
       .force(
         'link',
         d3
-          .forceLink(filteredLinks)
-          .id((d: any) => d.id)
+          .forceLink<Node, Link>(filteredLinks)
+          .id((d) => d.id)
           .strength(0.2)
       )
       .force('charge', d3.forceManyBody().strength(-400))
       .force('center', d3.forceCenter(width / 2, height / 2))
-      .force('collision', d3.forceCollide().radius(40));
+      .force('collision', d3.forceCollide<Node>().radius(40));
 
     // Create links
     const link = g
@@ -206,9 +206,9 @@ export const EntityVisualization: React.FC<EntityVisualizationProps> = ({
     // Add circles
     node
       .append('circle')
-      .attr('r', (d: Node) => (d.type === 'note' ? 15 : 12))
-      .attr('fill', (d: Node) => {
-        if (d.type === 'note') return '#8B5CF6';
+      .attr('r', (d) => (d.type === 'note' ? 15 : 12))
+      .attr('fill', (d) => {
+        if (d.type === 'note') return '#f032e6';
 
         const colors: Record<string, string> = {
           PER: '#3B82F6',
@@ -253,19 +253,21 @@ export const EntityVisualization: React.FC<EntityVisualizationProps> = ({
     // Add labels
     node
       .append('text')
-      .text((d: Node) => d.label)
+      .text((d) => d.label)
       .attr('dy', -25)
       .attr('text-anchor', 'middle')
       .attr('fill', '#D1D5DB')
       .attr('font-size', '11px')
-      .attr('font-weight', (d: Node) => (d.type === 'note' ? 'bold' : 'normal'))
+      .attr('font-weight', (d) => (d.type === 'note' ? 'bold' : 'normal'))
       .style('pointer-events', 'none');
 
     // Add count labels for entity types
     node
-      .filter((d: Node) => d.type === 'entity' && d.count)
+      .filter(
+        (d) => d.type === 'entity' && typeof d.count === 'number' && d.count > 0
+      )
       .append('text')
-      .text((d: Node) => d.count?.toString() || '')
+      .text((d) => d.count?.toString() || '')
       .attr('dy', 4)
       .attr('text-anchor', 'middle')
       .attr('fill', '#fff')
@@ -293,25 +295,25 @@ export const EntityVisualization: React.FC<EntityVisualizationProps> = ({
           .select('circle')
           .transition()
           .duration(200)
-          .attr('r', (d: Node) => (d.type === 'note' ? 15 : 12) * 1.2);
+          .attr('r', (d.type === 'note' ? 15 : 12) * 1.2);
       })
       .on('mouseleave', function (event, d) {
         d3.select(this)
           .select('circle')
           .transition()
           .duration(200)
-          .attr('r', (d: Node) => (d.type === 'note' ? 15 : 12));
+          .attr('r', d.type === 'note' ? 15 : 12);
       });
 
     // Update positions on simulation tick
     simulation.on('tick', () => {
       link
-        .attr('x1', (d: any) => d.source.x)
-        .attr('y1', (d: any) => d.source.y)
-        .attr('x2', (d: any) => d.target.x)
-        .attr('y2', (d: any) => d.target.y);
+        .attr('x1', (d) => (d.source as Node).x || 0)
+        .attr('y1', (d) => (d.source as Node).y || 0)
+        .attr('x2', (d) => (d.target as Node).x || 0)
+        .attr('y2', (d) => (d.target as Node).y || 0);
 
-      node.attr('transform', (d: any) => `translate(${d.x}, ${d.y})`);
+      node.attr('transform', (d) => `translate(${d.x || 0}, ${d.y || 0})`);
     });
 
     return () => {
@@ -334,17 +336,7 @@ export const EntityVisualization: React.FC<EntityVisualizationProps> = ({
 
   return (
     <div className="w-full h-full bg-gray-900/40 backdrop-blur-sm rounded-2xl border border-gray-700/50 p-6">
-      <div className="mb-6">
-        <h2 className="text-xl font-semibold text-white mb-2">
-          Entity Type Relationships
-        </h2>
-        <p className="text-sm text-gray-400">
-          Interactive visualization showing connections between notes and shared
-          entity types
-        </p>
-      </div>
-
-      <div className="flex gap-6 h-full">
+      <div className="flex gap-2 h-full">
         {/* Visualization */}
         <div className="flex-1 overflow-hidden rounded-xl bg-gray-950/50">
           <svg ref={svgRef} className="w-full h-full" />
@@ -387,7 +379,7 @@ export const EntityVisualization: React.FC<EntityVisualizationProps> = ({
         )}
       </div>
 
-      <div className="mt-4 flex items-center gap-6 text-xs text-gray-400">
+      {/* <div className="ml-2 mt-4 flex items-center gap-6 text-xs text-gray-400">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-purple-500 rounded-full" />
           <span>Notes</span>
@@ -396,11 +388,7 @@ export const EntityVisualization: React.FC<EntityVisualizationProps> = ({
           <div className="w-2 h-2 bg-blue-500 rounded-full" />
           <span>Entity Types</span>
         </div>
-        <div className="ml-auto">
-          Click notes to view • Click entity types to see related notes • Drag
-          to reposition • Scroll to zoom
-        </div>
-      </div>
+      </div> */}
     </div>
   );
 };

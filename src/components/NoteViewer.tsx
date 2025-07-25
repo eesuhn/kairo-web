@@ -131,14 +131,11 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({
     <div className="h-full flex flex-col bg-gray-950">
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-4xl mx-auto px-8 py-8 pb-16">
-          <div className="mb-8 max-w-4xl">
+          <div className="mb-4 max-w-4xl">
             <textarea
               value={editedTitle}
-              onChange={(e) => {
-                onBlur = { handleTitleBlur };
-                setEditedTitle(e.target.value);
-                setHasUnsavedChanges(true);
-              }}
+              onChange={(e) => setEditedTitle(e.target.value)}
+              onBlur={handleTitleBlur}
               className="w-full text-4xl font-bold bg-transparent text-white outline-none border-none resize-none placeholder-gray-500 leading-tight break-words max-w-full"
               placeholder="Untitled"
               rows={1}
@@ -159,9 +156,6 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({
 
           {entityTypes.size > 0 && (
             <div className="mb-10">
-              <h2 className="text-lg font-semibold text-white mb-4">
-                Entity Types
-              </h2>
               <div className="flex flex-wrap gap-2">
                 {Array.from(entityTypes).map((entityType, index) => (
                   <button
@@ -183,7 +177,7 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({
           )}
 
           <div className="mb-8">
-            <h2 className="text-xl font-semibold text-white mb-6">
+            <h2 className="text-xl font-semibold text-white mb-4">
               Executive Summary
             </h2>
             <div
@@ -193,14 +187,14 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({
                 setEditedAbstract(e.currentTarget.textContent || '')
               }
               onBlur={handleAbstractBlur}
-              className="w-full bg-transparent text-gray-200 leading-relaxed text-lg outline-none border-none min-h-[120px] focus:bg-gray-900/20 rounded-lg p-4 transition-all"
+              className="w-full bg-transparent text-gray-200 leading-relaxed text-lg outline-none border-none min-h-[120px] focus:bg-gray-900/20 rounded-lg px-2 transition-all"
               style={{ wordWrap: 'break-word', whiteSpace: 'pre-wrap' }}
             >
               {editedAbstract || 'Executive summary will appear here...'}
             </div>
           </div>
 
-          <div className="border-t border-gray-700/50 my-10"></div>
+          <div className="border-t border-gray-500 my-10"></div>
 
           <div className="mb-8">
             {extractiveContent.length > 0 ? (
