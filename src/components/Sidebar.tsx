@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { FileText, Search, MoreHorizontal, Trash2 } from 'lucide-react';
+import React from 'react';
+import { FileText, Search, Trash2 } from 'lucide-react';
 import { Note } from '../types';
 
 interface SidebarProps {
@@ -17,8 +17,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onDeleteNote,
   onSearch,
 }) => {
-  const [menuOpen, setMenuOpen] = useState<string | null>(null);
-
   return (
     <div className="w-80 bg-gray-900/80 backdrop-blur-sm border-r border-gray-700/50 flex flex-col">
       <div className="px-6 py-4 border-b border-gray-700/50">
@@ -62,27 +60,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    setMenuOpen(menuOpen === note.id ? null : note.id);
+                    onDeleteNote(note.id);
                   }}
-                  className="absolute right-2 top-2 p-1 opacity-0 group-hover:opacity-100 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-all"
+                  className="absolute right-2 top-2 p-1 opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-400 hover:bg-gray-700 rounded transition-all"
                 >
-                  <MoreHorizontal className="w-3 h-3" />
+                  <Trash2 className="w-3 h-3" />
                 </button>
-
-                {menuOpen === note.id && (
-                  <div className="absolute right-0 top-8 bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-10">
-                    <button
-                      onClick={() => {
-                        onDeleteNote(note.id);
-                        setMenuOpen(null);
-                      }}
-                      className="flex items-center gap-2 px-3 py-2 text-red-400 hover:bg-gray-700 rounded-lg text-sm w-full"
-                    >
-                      <Trash2 className="w-3 h-3" />
-                      Delete
-                    </button>
-                  </div>
-                )}
               </div>
             ))}
           </div>

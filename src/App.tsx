@@ -183,8 +183,8 @@ function App() {
                   flex items-center gap-2 px-4 py-2 rounded-xl transition-all
                   ${
                     showVisualization
-                      ? 'bg-green-900 text-white'
-                      : 'bg-gray-800 text-gray-300 hover:bg-gray-900'
+                      ? 'bg-gray-900 text-white'
+                      : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
                   }
                 `}
               >
@@ -259,9 +259,7 @@ function App() {
           ) : (
             <div className="flex-1 h-full flex items-center justify-center">
               <div className="text-center">
-                <h2 className="text-2xl font-bold mb-4">
-                  Welcome to Kairo Notes
-                </h2>
+                <h2 className="text-2xl font-bold mb-4">Welcome to Kairo</h2>
                 <p className="text-gray-400 mb-8">
                   {notes.length > 0
                     ? 'Select a note from the sidebar to view it.'

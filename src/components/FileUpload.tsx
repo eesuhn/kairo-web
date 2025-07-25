@@ -116,10 +116,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
                 <Upload className="w-8 h-8 text-purple-400" />
               </div>
               <div className="text-white font-medium">
-                Drop your file here or click to browse
-              </div>
-              <div className="text-gray-400 text-sm">
-                Supports PDF, DOC, DOCX, TXT, MD, CSV (max 50MB)
+                Drop your file or Click to browse
               </div>
             </>
           )}

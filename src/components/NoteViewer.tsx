@@ -142,9 +142,18 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({
             />
 
             <div className="flex items-center gap-4 mt-6 text-sm text-gray-400">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 pl-1">
                 <Calendar className="w-4 h-4" />
-                <span>Created {note.created_at.toLocaleDateString()}</span>
+                <span className="font-semibold">
+                  {note.created_at &&
+                    note.created_at
+                      .toLocaleDateString('en-GB', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: '2-digit',
+                      })
+                      .replace(/ (\d{2})$/, " '$1")}
+                </span>
               </div>
               {note.file_info && (
                 <span className="px-2 py-1 bg-gray-700 text-gray-300 rounded-full text-xs">
@@ -187,7 +196,7 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({
                 setEditedAbstract(e.currentTarget.textContent || '')
               }
               onBlur={handleAbstractBlur}
-              className="w-full bg-transparent text-gray-200 leading-relaxed text-lg outline-none border-none min-h-[120px] focus:bg-gray-900/20 rounded-lg px-2 transition-all"
+              className="w-full bg-transparent text-gray-200 leading-relaxed text-lg outline-none border-none focus:bg-gray-900/20 rounded-lg px-2 transition-all"
               style={{ wordWrap: 'break-word', whiteSpace: 'pre-wrap' }}
             >
               {editedAbstract || 'Executive summary will appear here...'}
