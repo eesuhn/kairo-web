@@ -83,45 +83,29 @@ export const EntityVisualization: React.FC<EntityVisualizationProps> = ({
     // Prepare data
     const nodes: Node[] = [];
     const links: Link[] = [];
-    const entityTypeCounts = new Map<string, number>();
+    const entityTypeNotes = new Map<string, Set<string>>();
 
-    // Add note nodes
+    // First pass: count which notes have each entity type
     notes.forEach((note) => {
-      nodes.push({
-        id: `note-${note.id}`,
-        type: 'note',
-        label:
-          note.title.length > 25 ? note.title.slice(0, 25) + '...' : note.title,
-        note,
-      });
-
-      // Count entity types and create links
       note.entities.forEach((entity) => {
         const entityType = entity.label;
-        // Skip miscellaneous entities
         if (
           entityType.toLowerCase() === 'misc' ||
           entityType.toLowerCase() === 'miscellaneous'
         )
           return;
 
-        entityTypeCounts.set(
-          entityType,
-          (entityTypeCounts.get(entityType) || 0) + 1
-        );
-
-        // Add link between note and entity type
-        links.push({
-          source: `note-${note.id}`,
-          target: `entity-${entityType}`,
-          strength: 1,
-        });
+        if (!entityTypeNotes.has(entityType)) {
+          entityTypeNotes.set(entityType, new Set());
+        }
+        entityTypeNotes.get(entityType)!.add(note.id);
       });
     });
 
-    // Add entity type nodes (only if they appear in multiple notes)
-    entityTypeCounts.forEach((count, entityType) => {
-      if (count > 1) {
+    // Create entity nodes only for types that appear in multiple notes
+    entityTypeNotes.forEach((noteSet, entityType) => {
+      const count = noteSet.size;
+      if (count >= 1) {
         nodes.push({
           id: `entity-${entityType}`,
           type: 'entity',
@@ -132,10 +116,43 @@ export const EntityVisualization: React.FC<EntityVisualizationProps> = ({
       }
     });
 
-    // Filter links to only include entity types that appear multiple times
-    const filteredLinks = links.filter((link) =>
-      nodes.some((node) => node.id === link.target)
-    );
+    // Second pass: create note nodes and links
+    notes.forEach((note) => {
+      nodes.push({
+        id: `note-${note.id}`,
+        type: 'note',
+        label:
+          note.title.length > 25 ? note.title.slice(0, 25) + '...' : note.title,
+        note,
+      });
+
+      // Track which entity types we've already linked from this note
+      const linkedEntityTypes = new Set<string>();
+
+      note.entities.forEach((entity) => {
+        const entityType = entity.label;
+        if (
+          entityType.toLowerCase() === 'misc' ||
+          entityType.toLowerCase() === 'miscellaneous'
+        )
+          return;
+
+        // Only create link if:
+        // 1. This entity type appears in multiple notes (has a node)
+        // 2. We haven't already linked this note to this entity type
+        if (
+          entityTypeNotes.get(entityType)!.size >= 1 &&
+          !linkedEntityTypes.has(entityType)
+        ) {
+          linkedEntityTypes.add(entityType);
+          links.push({
+            source: `note-${note.id}`,
+            target: `entity-${entityType}`,
+            strength: 1,
+          });
+        }
+      });
+    });
 
     // Create SVG with zoom behavior
     const g = svg
@@ -157,7 +174,7 @@ export const EntityVisualization: React.FC<EntityVisualizationProps> = ({
       .force(
         'link',
         d3
-          .forceLink<Node, Link>(filteredLinks)
+          .forceLink<Node, Link>(links)
           .id((d) => d.id)
           .strength(0.2)
       )
@@ -169,7 +186,7 @@ export const EntityVisualization: React.FC<EntityVisualizationProps> = ({
     const link = g
       .append('g')
       .selectAll('line')
-      .data(filteredLinks)
+      .data(links)
       .enter()
       .append('line')
       .attr('stroke', '#4B5563')
