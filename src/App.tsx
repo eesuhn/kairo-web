@@ -138,11 +138,11 @@ function App() {
   return (
     <div className="h-screen bg-gray-950 text-white flex overflow-hidden">
       {apiStatus === 'disconnected' && (
-        <div className="absolute top-4 right-4 z-50 bg-red-500/10 border border-red-500/20 rounded-lg p-3 backdrop-blur-sm">
+        <div className="absolute top-4 right-6 z-50 bg-red-500/10 border border-red-500/20 rounded-lg p-3 backdrop-blur-lg">
           <div className="flex items-center gap-2">
             <AlertCircle className="w-4 h-4 text-red-400" />
-            <span className="text-red-400 text-sm">
-              API Server Disconnected
+            <span className="text-red-400 text-sm font-semibold">
+              Server Disconnected
             </span>
           </div>
         </div>
@@ -172,19 +172,19 @@ function App() {
       />
 
       <div className="flex-1 flex flex-col">
-        <header className="border-b border-gray-700/50 bg-gray-900/50 backdrop-blur-sm px-4 py-[20px]">
+        <header className="border-b border-gray-700/50 bg-gray-900/50 backdrop-blur-sm px-4 h-20 pt-5">
           <div className="flex items-center justify-between">
             <div />
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               <button
                 onClick={() => setShowVisualization(!showVisualization)}
                 className={`
-                  flex items-center gap-2 px-4 py-2 rounded-xl transition-all
+                  flex items-center gap-2 px-4 py-2 rounded-md font-medium transition-all duration-200
                   ${
                     showVisualization
-                      ? 'bg-gray-900 text-white'
-                      : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                      ? 'bg-white/10 text-white border border-white/20 backdrop-blur-sm shadow-lg'
+                      : 'text-gray-300 hover:text-white hover:bg-white/5 backdrop-blur-sm'
                   }
                 `}
               >
@@ -194,7 +194,7 @@ function App() {
 
               <button
                 onClick={() => setShowUploadModal(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-purple-900 hover:bg-purple-800 text-white rounded-xl transition-all"
+                className="flex items-center gap-2 px-4 py-2 rounded-md font-medium transition-all duration-200 text-gray-300 hover:text-white hover:bg-white/5 backdrop-blur-sm"
               >
                 <svg
                   className="w-4 h-4"
@@ -214,7 +214,7 @@ function App() {
 
               <div
                 className={`
-                w-2 h-2 rounded-full mr-3 ml-4
+                w-2 h-2 rounded-full mx-4
                 ${
                   apiStatus === 'connected'
                     ? 'bg-green-500'
@@ -258,11 +258,13 @@ function App() {
           ) : (
             <div className="flex-1 h-full flex items-center justify-center">
               <div className="text-center">
-                <h2 className="text-2xl font-bold mb-4">Welcome to Kairo</h2>
-                <p className="text-gray-400 mb-8">
+                <h2 className="text-2xl font-bold mb-4">
+                  ❒&nbsp;&nbsp;Welcome to Kairo&nbsp;&nbsp;❒
+                </h2>
+                <p className="text-gray-400 mb-8 font-semibold">
                   {notes.length > 0
                     ? 'Select a note from the sidebar to view it.'
-                    : 'Upload your first document to get started with AI-powered note taking.'}
+                    : 'Upload your first document to get started.'}
                 </p>
               </div>
             </div>

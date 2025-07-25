@@ -51,7 +51,7 @@ export const EntityPill: React.FC<EntityPillProps> = ({ entity }) => {
     <span
       className={`
         inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium
-        border backdrop-blur-sm transition-all duration-200 hover:scale-105
+        border backdrop-blur-sm transition-all duration-100 hover:scale-105
         ${colorClass}
       `}
       title={`${entity.label} (${entity.confidence ? Math.round(entity.confidence * 100) : 0}% confidence)`}

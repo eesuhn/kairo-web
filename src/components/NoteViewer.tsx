@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Calendar } from 'lucide-react';
 import { Note } from '../types';
 import { EntityPill } from './EntityPill';
@@ -65,6 +65,7 @@ const formatExtractiveContent = (extractiveArray: string[]): string[] => {
 
   return paragraphs;
 };
+
 export const NoteViewer: React.FC<NoteViewerProps> = ({
   note,
   onNoteUpdate,
@@ -74,17 +75,29 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({
   const [editedAbstract, setEditedAbstract] = useState(
     note.abstractive_summary
   );
+  const [extractiveParagraphs, setExtractiveParagraphs] = useState<string[]>(
+    []
+  );
+
+  const abstractRef = useRef<HTMLDivElement>(null);
+  const extractiveRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     setEditedTitle(note.title);
     setEditedAbstract(note.abstractive_summary);
+    setExtractiveParagraphs(formatExtractiveContent(note.extractive_summary));
   }, [note]);
 
-  const saveChanges = async (title: string, abstract: string) => {
+  const saveChanges = async (
+    title: string,
+    abstract: string,
+    extractive?: string[]
+  ) => {
     const updatedNote = {
       ...note,
       title,
       abstractive_summary: abstract,
+      ...(extractive && { extractive_summary: extractive }),
       updated_at: new Date(),
       is_edited: true,
     };
@@ -104,6 +117,58 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({
     }
   };
 
+  const handleExtractiveBlur = () => {
+    const extractiveArray = extractiveParagraphs
+      .join(' ')
+      .split(/(?<=[.!?])\s+/)
+      .filter((s) => s.trim().length > 0);
+
+    if (
+      JSON.stringify(extractiveArray) !==
+      JSON.stringify(note.extractive_summary)
+    ) {
+      saveChanges(editedTitle, editedAbstract, extractiveArray);
+    }
+  };
+
+  const preserveCursorPosition = (
+    element: HTMLElement,
+    callback: () => void
+  ) => {
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) {
+      callback();
+      return;
+    }
+
+    const range = selection.getRangeAt(0);
+    const offset = range.startOffset;
+    const startContainer = range.startContainer;
+
+    callback();
+
+    setTimeout(() => {
+      try {
+        const newRange = document.createRange();
+        if (startContainer.parentNode?.contains(startContainer)) {
+          newRange.setStart(
+            startContainer,
+            Math.min(offset, startContainer.textContent?.length || 0)
+          );
+          newRange.collapse(true);
+          selection.removeAllRanges();
+          selection.addRange(newRange);
+        }
+      } catch (e) {
+        const newRange = document.createRange();
+        newRange.selectNodeContents(element);
+        newRange.collapse(false);
+        selection.removeAllRanges();
+        selection.addRange(newRange);
+      }
+    }, 0);
+  };
+
   const entityTypes = new Set<string>();
   note.entities.forEach((entity) => {
     if (
@@ -113,8 +178,6 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({
       return;
     entityTypes.add(entity.label);
   });
-
-  const extractiveContent = formatExtractiveContent(note.extractive_summary);
 
   const truncateFilename = (filename: string, maxLength: number = 30) => {
     if (filename.length <= maxLength) return filename;
@@ -190,11 +253,15 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({
               At a Glance&nbsp;&nbsp;👀
             </h2>
             <div
+              ref={abstractRef}
               contentEditable
               suppressContentEditableWarning
-              onInput={(e) =>
-                setEditedAbstract(e.currentTarget.textContent || '')
-              }
+              onInput={(e) => {
+                const element = e.currentTarget;
+                preserveCursorPosition(element, () => {
+                  setEditedAbstract(element.textContent || '');
+                });
+              }}
               onBlur={handleAbstractBlur}
               className="w-full bg-transparent text-gray-200 leading-relaxed text-lg outline-none border-none focus:bg-gray-900/20 rounded-lg px-2 transition-all text-justify"
               style={{ wordWrap: 'break-word', whiteSpace: 'pre-wrap' }}
@@ -209,20 +276,48 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({
             <h2 className="text-xl font-semibold text-white mb-4">
               More Details&nbsp;&nbsp;🔖
             </h2>
-            {extractiveContent.length > 0 ? (
+            {extractiveParagraphs.length > 0 ? (
               <div className="space-y-4 px-2">
-                {extractiveContent.map((paragraph, index) => (
-                  <p
+                {extractiveParagraphs.map((paragraph, index) => (
+                  <div
                     key={index}
-                    className="text-gray-200 leading-relaxed text-base text-justify"
+                    ref={(el) => (extractiveRefs.current[index] = el)}
+                    contentEditable
+                    suppressContentEditableWarning
+                    onInput={(e) => {
+                      const element = e.currentTarget;
+                      preserveCursorPosition(element, () => {
+                        const newParagraphs = [...extractiveParagraphs];
+                        newParagraphs[index] = element.textContent || '';
+                        setExtractiveParagraphs(newParagraphs);
+                      });
+                    }}
+                    onBlur={handleExtractiveBlur}
+                    className="text-gray-200 leading-relaxed text-base text-justify outline-none border-none focus:bg-gray-900/20 rounded-lg px-2 py-1 transition-all"
+                    style={{ wordWrap: 'break-word', whiteSpace: 'pre-wrap' }}
                   >
                     {paragraph}
-                  </p>
+                  </div>
                 ))}
               </div>
             ) : (
-              <div className="text-gray-400 italic">
-                No detailed content available.
+              <div
+                contentEditable
+                suppressContentEditableWarning
+                onInput={(e) => {
+                  const element = e.currentTarget;
+                  preserveCursorPosition(element, () => {
+                    const text = element.textContent || '';
+                    if (text.trim()) {
+                      setExtractiveParagraphs([text]);
+                    }
+                  });
+                }}
+                onBlur={handleExtractiveBlur}
+                className="text-gray-400 italic outline-none border-none focus:bg-gray-900/20 rounded-lg px-2 py-1 transition-all focus:text-gray-200"
+                style={{ wordWrap: 'break-word', whiteSpace: 'pre-wrap' }}
+              >
+                No detailed content available. Click to add content...
               </div>
             )}
           </div>

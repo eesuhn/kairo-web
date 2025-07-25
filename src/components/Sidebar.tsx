@@ -43,7 +43,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     w-full flex items-center gap-3 p-4 rounded-lg transition-all text-left
                     ${
                       selectedNoteId === note.id
-                        ? 'bg-purple-500/20 text-purple-300'
+                        ? 'bg-purple-500/10 border border-purple-500/20 rounded-lg p-3 backdrop-blur-lg'
                         : 'text-gray-300 hover:bg-gray-800/50 hover:text-white'
                     }
                   `}

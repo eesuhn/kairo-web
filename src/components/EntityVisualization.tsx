@@ -276,7 +276,7 @@ export const EntityVisualization: React.FC<EntityVisualizationProps> = ({
       .style('pointer-events', 'none');
 
     // Add click handlers
-    node.on('click', (event, d) => {
+    node.on('click', (_, d) => {
       if (d.type === 'note' && d.note) {
         onNoteSelect(d.note);
       } else if (d.type === 'entity' && d.entityType) {
@@ -290,14 +290,14 @@ export const EntityVisualization: React.FC<EntityVisualizationProps> = ({
 
     // Add hover effects
     node
-      .on('mouseenter', function (event, d) {
+      .on('mouseenter', function (_, d) {
         d3.select(this)
           .select('circle')
           .transition()
           .duration(200)
           .attr('r', (d.type === 'note' ? 15 : 12) * 1.2);
       })
-      .on('mouseleave', function (event, d) {
+      .on('mouseleave', function (_, d) {
         d3.select(this)
           .select('circle')
           .transition()
@@ -325,9 +325,8 @@ export const EntityVisualization: React.FC<EntityVisualizationProps> = ({
     return (
       <div className="flex items-center justify-center h-full text-gray-400">
         <div className="text-center">
-          <p className="text-lg mb-2">No notes to visualize</p>
-          <p className="text-sm">
-            Upload some files to see entity relationships
+          <p className="text-lg mb-2 font-semibold">
+            Nothing to visualize here...
           </p>
         </div>
       </div>
