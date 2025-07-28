@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useMemo } from 'react';
 import { Upload, AlertCircle } from 'lucide-react';
 
 interface FileUploadProps {
@@ -13,25 +13,26 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   const [dragActive, setDragActive] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const allowedTypes = useMemo(
+    () => [
+      'text/plain',
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'text/markdown',
+      'text/csv',
+      'audio/mpeg',
+      'audio/wav',
+    ],
+    []
+  );
+
   const validateAndUpload = useCallback(
     (file: File) => {
-      // Check file size (50MB limit)
       if (file.size > 50 * 1024 * 1024) {
         setError('File size must be less than 50MB');
         return;
       }
-
-      // Check file type
-      const allowedTypes = [
-        'text/plain',
-        'application/pdf',
-        'application/msword',
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        'text/markdown',
-        'text/csv',
-        'audio/mpeg',
-        'audio/wav',
-      ];
 
       if (!allowedTypes.includes(file.type)) {
         setError(
@@ -42,7 +43,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
 
       onFileUpload(file);
     },
-    [onFileUpload]
+    [onFileUpload, allowedTypes]
   );
 
   const handleDrag = useCallback((e: React.DragEvent) => {

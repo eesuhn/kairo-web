@@ -1,45 +1,7 @@
 import React from 'react';
 import { X, FileText } from 'lucide-react';
 import { Note } from '../types';
-
-const getReadableEntityLabel = (label: string): string => {
-  const entityLabels: Record<string, string> = {
-    PER: 'Person',
-    PERSON: 'Person',
-    ORG: 'Organization',
-    ORGANIZATION: 'Organization',
-    LOC: 'Location',
-    LOCATION: 'Location',
-    GPE: 'Location',
-    DATE: 'Date',
-    TIME: 'Time',
-    MONEY: 'Money',
-    PERCENT: 'Percentage',
-    field: 'Academic Field',
-    task: 'Task',
-    product: 'Product',
-    algorithm: 'Algorithm',
-    metrics: 'Metrics',
-    programlang: 'Programming Language',
-    conference: 'Conference',
-    book: 'Book',
-    award: 'Award',
-    poem: 'Poem',
-    event: 'Event',
-    magazine: 'Magazine',
-    literarygenre: 'Literary Genre',
-    discipline: 'Discipline',
-    enzyme: 'Enzyme',
-    protein: 'Protein',
-    chemicalelement: 'Chemical Element',
-    chemicalcompound: 'Chemical Compound',
-    astronomicalobject: 'Astronomical Object',
-    academicjournal: 'Academic Journal',
-    theory: 'Theory',
-  };
-
-  return entityLabels[label] || label.charAt(0).toUpperCase() + label.slice(1);
-};
+import { getReadableEntityLabel } from '../utils/entityLabels';
 
 interface EntityPanelProps {
   entityType: string;
@@ -74,7 +36,6 @@ export const EntityPanel: React.FC<EntityPanelProps> = ({
           : {}
       }
     >
-      {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-700/50">
         <h3 className="text-lg font-semibold text-white">
           {getReadableEntityLabel(entityType)}
@@ -87,15 +48,7 @@ export const EntityPanel: React.FC<EntityPanelProps> = ({
         </button>
       </div>
 
-      {/* Content */}
       <div className="flex-1 overflow-y-auto p-4">
-        {/* <div className="mb-3">
-          <p className="text-sm text-gray-400">
-            {notes.length} note{notes.length !== 1 ? 's' : ''} contain this
-            entity type
-          </p>
-        </div> */}
-
         <div className="space-y-2">
           {notes.map((note) => (
             <button
