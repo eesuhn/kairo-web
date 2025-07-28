@@ -1,6 +1,6 @@
 # ❒ Kairo Web
 
-<img src="https://github.com/user-attachments/assets/0b7f2114-d66e-4ddb-8189-d49f33ba6e4c" alt="screenshot" width="540"><br>
+<img src="https://github.com/user-attachments/assets/d6272e62-c73f-43cd-85d1-d165ae1bf1d6" alt="screenshot" width="540"><br>
 
 Web app for Kairo — an NLP-powered note taker.
 
