@@ -1,8 +1,13 @@
 # ❒ Kairo Web
 
-<img src="https://github.com/user-attachments/assets/d6272e62-c73f-43cd-85d1-d165ae1bf1d6" alt="screenshot" width="540"><br>
+<img width="500" alt="screenshot 1" src="https://github.com/user-attachments/assets/a24a942d-0006-4968-8f92-3eb058888081" />
+<img width="500" alt="screenshot 2" src="https://github.com/user-attachments/assets/f25b03d3-4067-4ce4-86ab-a4171d77aca5" />
 
+<br>
+<br>
 Web app for Kairo — an NLP-powered note taker.
+<br>
+<br>
 
 > [!WARNING]
 > You must pair this web app with [Kairo Core](https://github.com/eesuhn/kairo-core) to support the NLP features!!!
