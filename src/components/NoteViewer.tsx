@@ -285,7 +285,10 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({
                 {entityTypes.map((entityType, index) => (
                   <button
                     key={index}
-                    onClick={() => onEntityTypeClick(entityType)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onEntityTypeClick(entityType);
+                    }}
                   >
                     <EntityPill
                       entity={{
