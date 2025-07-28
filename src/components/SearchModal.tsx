@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Search, X, FileText } from 'lucide-react';
 import { Note, SearchResult } from '../types';
 import { storage } from '../utils/storage';
@@ -18,6 +18,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
   const [results, setResults] = useState<SearchResult[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const performSearch = useCallback(async (searchQuery: string) => {
     if (!searchQuery.trim()) {
@@ -51,6 +52,12 @@ export const SearchModal: React.FC<SearchModalProps> = ({
     return () => clearTimeout(delayedSearch);
   }, [query, performSearch]);
 
+  useEffect(() => {
+    if (isOpen && inputRef.current) {
+      inputRef.current.select();
+    }
+  }, [isOpen]);
+
   const handleSelect = useCallback(
     async (result: SearchResult) => {
       const note = await storage.getNote(result.id);
@@ -69,11 +76,17 @@ export const SearchModal: React.FC<SearchModalProps> = ({
       switch (e.key) {
         case 'ArrowDown':
           e.preventDefault();
-          setSelectedIndex((prev) => Math.min(prev + 1, results.length - 1));
+          setSelectedIndex((prev) =>
+            results.length > 0 ? (prev + 1) % results.length : 0
+          );
           break;
         case 'ArrowUp':
           e.preventDefault();
-          setSelectedIndex((prev) => Math.max(prev - 1, 0));
+          setSelectedIndex((prev) =>
+            results.length > 0
+              ? (prev - 1 + results.length) % results.length
+              : 0
+          );
           break;
         case 'Enter':
           e.preventDefault();
@@ -100,6 +113,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
           <div className="flex items-center border-b border-gray-700/50 p-4">
             <Search className="mr-3 h-5 w-5 text-gray-400" />
             <input
+              ref={inputRef}
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
