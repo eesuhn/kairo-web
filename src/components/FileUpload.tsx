@@ -14,16 +14,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   const [error, setError] = useState<string | null>(null);
 
   const allowedTypes = useMemo(
-    () => [
-      'text/plain',
-      'application/pdf',
-      'application/msword',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      'text/markdown',
-      'text/csv',
-      'audio/mpeg',
-      'audio/wav',
-    ],
+    () => ['application/pdf', 'application/msword', 'audio/mpeg', 'audio/ogg'],
     []
   );
 
