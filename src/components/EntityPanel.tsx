@@ -8,7 +8,6 @@ interface EntityPanelProps {
   notes: Note[];
   onClose: () => void;
   onNoteSelect: (note: Note) => void;
-  overlay?: boolean;
 }
 
 export const EntityPanel: React.FC<EntityPanelProps> = ({
@@ -16,26 +15,9 @@ export const EntityPanel: React.FC<EntityPanelProps> = ({
   notes,
   onClose,
   onNoteSelect,
-  overlay = false,
 }) => {
   return (
-    <div
-      className={`${
-        overlay
-          ? 'animate-slidein fixed right-0 z-40 flex flex-col border-l-2 border-gray-200 bg-white backdrop-blur-sm'
-          : 'flex w-80 flex-col border-l border-gray-700/50 bg-gray-900/90 backdrop-blur-sm'
-      } transition-all duration-300`}
-      style={
-        overlay
-          ? {
-              width: '20rem',
-              minWidth: '20rem',
-              top: '80px',
-              height: 'calc(100vh - 64px)',
-            }
-          : {}
-      }
-    >
+    <div className="flex w-80 flex-shrink-0 flex-col bg-white transition-all duration-300">
       <div className="flex items-center justify-between p-4">
         <h3 className="text-lg font-semibold text-black">
           {getReadableEntityLabel(entityType)}

@@ -232,8 +232,13 @@ function App() {
               />
             </div>
           ) : selectedNote ? (
-            <>
-              <div className="w-full">
+            <div className="flex h-full w-full">
+              <div
+                className={`${selectedEntityType ? 'flex-1' : 'w-full'}`}
+                onClick={() =>
+                  selectedEntityType && setSelectedEntityType(null)
+                }
+              >
                 <NoteViewer
                   note={selectedNote}
                   onNoteUpdate={handleNoteUpdate}
@@ -241,15 +246,19 @@ function App() {
                 />
               </div>
               {selectedEntityType && (
-                <EntityPanel
-                  entityType={selectedEntityType}
-                  notes={entityPanelNotes}
-                  onClose={() => setSelectedEntityType(null)}
-                  onNoteSelect={handleNoteSelect}
-                  overlay
-                />
+                <div
+                  className="border-l-2 border-gray-200"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <EntityPanel
+                    entityType={selectedEntityType}
+                    notes={entityPanelNotes}
+                    onClose={() => setSelectedEntityType(null)}
+                    onNoteSelect={handleNoteSelect}
+                  />
+                </div>
               )}
-            </>
+            </div>
           ) : (
             <div className="flex h-full flex-1 items-center justify-center">
               <div className="text-center">

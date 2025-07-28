@@ -328,14 +328,14 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({
                   setEditedAbstract(' ');
                   setTimeout(() => abstractRef.current?.focus(), 0);
                 }}
-                className="w-full cursor-text rounded-lg border-none bg-transparent px-2 text-justify text-lg leading-relaxed text-gray-400 outline-none transition-all hover:bg-gray-900/20"
+                className="w-full cursor-text rounded-lg border-none bg-transparent px-2 text-justify text-lg leading-relaxed text-gray-400 outline-none transition-all"
               >
                 Executive summary will appear here...
               </div>
             )}
           </div>
 
-          <div className="my-10 border-t border-gray-400"></div>
+          <div className="my-10 border-t-2 border-gray-200"></div>
 
           <div className="mb-8">
             <h2 className="mb-4 text-xl font-semibold text-black">
@@ -368,7 +368,7 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({
                   setEditedExtractive(' ');
                   setTimeout(() => extractiveRef.current?.focus(), 0);
                 }}
-                className="w-full cursor-text rounded-lg border-none bg-transparent px-2 py-1 text-justify text-base leading-relaxed text-black outline-none transition-all hover:bg-gray-900/20"
+                className="w-full cursor-text rounded-lg border-none bg-transparent px-2 py-1 text-justify text-base leading-relaxed text-black outline-none transition-all"
                 style={{
                   wordWrap: 'break-word',
                   whiteSpace: 'pre-wrap',
