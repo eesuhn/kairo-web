@@ -169,8 +169,8 @@ export const EntityVisualization: React.FC<EntityVisualizationProps> = ({
       .data(links)
       .enter()
       .append('line')
-      .attr('stroke', '#4B5563')
-      .attr('stroke-opacity', 0.6)
+      .attr('stroke', '#374151')
+      .attr('stroke-opacity', 0.2)
       .attr('stroke-width', 2);
 
     // Create nodes
@@ -205,7 +205,7 @@ export const EntityVisualization: React.FC<EntityVisualizationProps> = ({
       .append('circle')
       .attr('r', (d) => (d.type === 'note' ? 15 : 12))
       .attr('fill', (d) => {
-        if (d.type === 'note') return '#f032e6';
+        if (d.type === 'note') return '#000';
         return getEntityColor(d.entityType || '');
       })
       .attr('stroke', '#fff')
@@ -215,9 +215,9 @@ export const EntityVisualization: React.FC<EntityVisualizationProps> = ({
     node
       .append('text')
       .text((d) => d.label)
-      .attr('dy', -25)
+      .attr('dy', -20)
       .attr('text-anchor', 'middle')
-      .attr('fill', '#D1D5DB')
+      .attr('fill', '#000')
       .attr('font-size', '11px')
       .attr('font-weight', (d) => (d.type === 'note' ? 'bold' : 'normal'))
       .style('pointer-events', 'none');
@@ -279,7 +279,7 @@ export const EntityVisualization: React.FC<EntityVisualizationProps> = ({
 
   if (notes.length === 0) {
     return (
-      <div className="flex h-full items-center justify-center text-gray-400">
+      <div className="flex h-full items-center justify-center text-black">
         <div className="text-center">
           <p className="mb-2 text-lg font-semibold">
             Nothing to visualize here...
@@ -290,21 +290,21 @@ export const EntityVisualization: React.FC<EntityVisualizationProps> = ({
   }
 
   return (
-    <div className="h-full w-full rounded-2xl border border-gray-700/50 bg-gray-900/40 p-6 backdrop-blur-sm">
+    <div className="h-full w-full rounded-2xl bg-white p-2 backdrop-blur-sm">
       <div className="flex h-full gap-2">
-        <div className="flex-1 overflow-hidden rounded-xl bg-gray-950/50">
+        <div className="flex-1 overflow-hidden rounded-xl bg-gray-100">
           <svg ref={svgRef} className="h-full w-full" />
         </div>
 
         {selectedEntityType && relatedNotes.length > 0 && (
-          <div className="w-80 overflow-y-auto rounded-xl bg-gray-800/50 p-4">
-            <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-white">
+          <div className="w-80 overflow-y-auto rounded-xl bg-gray-100 px-2 py-4">
+            <div className="mb-6 flex items-center justify-between px-2">
+              <h3 className="text-lg font-semibold text-black">
                 {getReadableEntityLabel(selectedEntityType)}
               </h3>
               <button
                 onClick={handleClosePanel}
-                className="text-gray-400 hover:text-white"
+                className="text-gray-500 hover:text-black"
               >
                 ×
               </button>
@@ -314,13 +314,13 @@ export const EntityVisualization: React.FC<EntityVisualizationProps> = ({
                 <button
                   key={note.id}
                   onClick={() => onNoteSelect(note)}
-                  className="w-full rounded-lg bg-gray-700/50 p-3 text-left transition-all hover:bg-gray-700"
+                  className="w-full rounded-lg bg-gray-100 p-2 text-left transition-all hover:bg-gray-200"
                 >
-                  <div className="truncate text-sm font-medium text-white">
+                  <div className="truncate text-sm font-medium text-black">
                     {note.title}
                   </div>
-                  <div className="mt-1 truncate text-xs text-gray-400">
-                    {note.abstractive_summary.slice(0, 80)}...
+                  <div className="ml-[2px] mt-[2px] truncate text-xs text-gray-400">
+                    {note.abstractive_summary.slice(0, 40)}...
                   </div>
                 </button>
               ))}

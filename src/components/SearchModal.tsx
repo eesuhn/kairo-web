@@ -94,9 +94,9 @@ export const SearchModal: React.FC<SearchModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 pt-20 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 pb-36 backdrop-blur-sm">
       <div className="mx-4 w-full max-w-2xl">
-        <div className="overflow-hidden rounded-2xl border border-gray-700/50 bg-gray-900/90 shadow-2xl backdrop-blur-sm">
+        <div className="overflow-hidden rounded-2xl border-2 border-gray-700/50 bg-white shadow-2xl backdrop-blur-sm">
           <div className="flex items-center border-b border-gray-700/50 p-4">
             <Search className="mr-3 h-5 w-5 text-gray-400" />
             <input
@@ -104,12 +104,12 @@ export const SearchModal: React.FC<SearchModalProps> = ({
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search notes..."
-              className="flex-1 bg-transparent text-lg text-white placeholder-gray-400 outline-none"
+              className="flex-1 bg-transparent text-lg text-black placeholder-gray-400 outline-none"
               autoFocus
             />
             <button
               onClick={onClose}
-              className="rounded p-1 text-gray-400 transition-all hover:bg-gray-700 hover:text-white"
+              className="rounded p-1 text-gray-400 transition-all hover:text-black"
             >
               <X className="h-5 w-5" />
             </button>
@@ -127,10 +127,10 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                   <button
                     key={`${result.type}-${result.id}`}
                     onClick={() => handleSelect(result)}
-                    className={`flex w-full items-center gap-3 p-4 text-left transition-all ${
+                    className={`flex w-full items-center gap-3 p-4 text-left text-gray-700 transition-all ${
                       index === selectedIndex
-                        ? 'bg-purple-500/20 text-purple-300'
-                        : 'text-gray-300 hover:bg-gray-800/50'
+                        ? 'bg-gray-200'
+                        : 'hover:bg-gray-800/50'
                     } `}
                   >
                     <FileText className="h-5 w-5 flex-shrink-0" />
@@ -156,7 +156,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
             )}
           </div>
 
-          <div className="border-t border-gray-700/50 bg-gray-900/50 p-3">
+          <div className="border-t border-gray-700/50 p-3">
             <div className="flex items-center justify-between text-xs text-gray-400">
               <div className="flex items-center gap-4">
                 <span>↑↓ Navigate</span>

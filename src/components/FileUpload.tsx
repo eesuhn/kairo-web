@@ -89,8 +89,8 @@ export const FileUpload: React.FC<FileUploadProps> = ({
       <div
         className={`relative rounded-xl border-2 border-dashed p-8 text-center transition-all ${
           dragActive
-            ? 'border-purple-400 bg-purple-500/10'
-            : 'border-gray-600 hover:border-gray-500'
+            ? 'border-gray-500 bg-gray-500/10'
+            : 'border-gray-400 hover:border-gray-500'
         } ${isProcessing ? 'pointer-events-none opacity-50' : ''} `}
         onDragEnter={handleDrag}
         onDragLeave={handleDrag}
@@ -105,23 +105,23 @@ export const FileUpload: React.FC<FileUploadProps> = ({
           disabled={isProcessing}
         />
 
-        <div className="flex flex-col items-center gap-4">
+        <div className="flex flex-col items-center gap-2">
           {isProcessing ? (
             <>
-              <div className="h-12 w-12 animate-spin rounded-full border-2 border-purple-500 border-t-transparent" />
-              <div className="font-medium text-white">
+              <div className="h-12 w-12 animate-spin rounded-full border-2 border-gray-600 border-t-transparent" />
+              <div className="font-medium text-black">
                 Processing your file...
               </div>
-              <div className="text-sm text-gray-400">
+              <div className="text-sm text-gray-800">
                 This may take a few moments
               </div>
             </>
           ) : (
             <>
-              <div className="rounded-full bg-gray-800 p-4">
-                <Upload className="h-8 w-8 text-purple-400" />
+              <div className="rounded-full bg-black p-4">
+                <Upload className="h-8 w-8 text-white" />
               </div>
-              <div className="font-medium text-white">
+              <div className="font-medium text-black">
                 Drop your file or Click to browse
               </div>
             </>

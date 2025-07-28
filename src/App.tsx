@@ -181,8 +181,8 @@ function App() {
                 onClick={() => setShowVisualization(!showVisualization)}
                 className={`flex items-center gap-2 font-medium transition-all duration-200 ${
                   showVisualization
-                    ? 'border-b-2 border-black text-black hover:border-gray-400 hover:text-gray-400'
-                    : 'text-black backdrop-blur-sm hover:bg-white/5 hover:text-gray-400'
+                    ? 'border-b-2 border-gray-700 text-black hover:border-gray-500 hover:text-gray-500'
+                    : 'text-black backdrop-blur-sm hover:bg-white/5 hover:text-gray-500'
                 } `}
               >
                 <BarChart3 className="h-4 w-4" />
@@ -191,7 +191,7 @@ function App() {
 
               <button
                 onClick={() => setShowUploadModal(true)}
-                className="flex items-center gap-2 rounded-md px-4 py-2 font-medium text-black backdrop-blur-sm transition-all duration-200 hover:bg-white/5 hover:text-gray-400"
+                className="flex items-center gap-2 rounded-md px-4 py-2 font-medium text-black backdrop-blur-sm transition-all duration-200 hover:bg-white/5 hover:text-gray-500"
               >
                 <svg
                   className="h-4 w-4"
@@ -252,10 +252,10 @@ function App() {
           ) : (
             <div className="flex h-full flex-1 items-center justify-center">
               <div className="text-center">
-                <h2 className="mb-4 text-2xl font-bold">
-                  ❒&nbsp;&nbsp;Welcome to Kairo&nbsp;&nbsp;❒
+                <h2 className="mb-4 text-2xl font-bold text-black">
+                  Welcome to Kairo&nbsp;&nbsp;❒
                 </h2>
-                <p className="mb-8 font-semibold text-gray-400">
+                <p className="mb-8 font-semibold text-gray-500">
                   {notes.length > 0
                     ? 'Select a note from the sidebar to view it.'
                     : 'Upload your first document to get started.'}
