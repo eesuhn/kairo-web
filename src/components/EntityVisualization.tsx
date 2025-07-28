@@ -279,9 +279,9 @@ export const EntityVisualization: React.FC<EntityVisualizationProps> = ({
 
   if (notes.length === 0) {
     return (
-      <div className="flex items-center justify-center h-full text-gray-400">
+      <div className="flex h-full items-center justify-center text-gray-400">
         <div className="text-center">
-          <p className="text-lg mb-2 font-semibold">
+          <p className="mb-2 text-lg font-semibold">
             Nothing to visualize here...
           </p>
         </div>
@@ -290,15 +290,15 @@ export const EntityVisualization: React.FC<EntityVisualizationProps> = ({
   }
 
   return (
-    <div className="w-full h-full bg-gray-900/40 backdrop-blur-sm rounded-2xl border border-gray-700/50 p-6">
-      <div className="flex gap-2 h-full">
+    <div className="h-full w-full rounded-2xl border border-gray-700/50 bg-gray-900/40 p-6 backdrop-blur-sm">
+      <div className="flex h-full gap-2">
         <div className="flex-1 overflow-hidden rounded-xl bg-gray-950/50">
-          <svg ref={svgRef} className="w-full h-full" />
+          <svg ref={svgRef} className="h-full w-full" />
         </div>
 
         {selectedEntityType && relatedNotes.length > 0 && (
-          <div className="w-80 bg-gray-800/50 rounded-xl p-4 overflow-y-auto">
-            <div className="flex items-center justify-between mb-4">
+          <div className="w-80 overflow-y-auto rounded-xl bg-gray-800/50 p-4">
+            <div className="mb-4 flex items-center justify-between">
               <h3 className="text-lg font-semibold text-white">
                 {getReadableEntityLabel(selectedEntityType)}
               </h3>
@@ -314,12 +314,12 @@ export const EntityVisualization: React.FC<EntityVisualizationProps> = ({
                 <button
                   key={note.id}
                   onClick={() => onNoteSelect(note)}
-                  className="w-full text-left p-3 bg-gray-700/50 hover:bg-gray-700 rounded-lg transition-all"
+                  className="w-full rounded-lg bg-gray-700/50 p-3 text-left transition-all hover:bg-gray-700"
                 >
-                  <div className="font-medium text-white text-sm truncate">
+                  <div className="truncate text-sm font-medium text-white">
                     {note.title}
                   </div>
-                  <div className="text-xs text-gray-400 mt-1 truncate">
+                  <div className="mt-1 truncate text-xs text-gray-400">
                     {note.abstractive_summary.slice(0, 80)}...
                   </div>
                 </button>

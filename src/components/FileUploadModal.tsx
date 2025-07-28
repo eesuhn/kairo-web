@@ -36,10 +36,10 @@ export const FileUploadModal: React.FC<FileUploadModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
       onClick={handleOutsideClick}
     >
-      <div className="bg-gray-900/90 backdrop-blur-sm border border-gray-700/50 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-auto">
+      <div className="max-h-[90vh] w-full max-w-2xl overflow-auto rounded-2xl border border-gray-700/50 bg-gray-900/90 shadow-2xl backdrop-blur-sm">
         {/* Content */}
         <div className="p-6">
           <FileUpload onFileUpload={onFileUpload} isProcessing={isProcessing} />

@@ -87,15 +87,11 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   return (
     <div className="w-full">
       <div
-        className={`
-          relative border-2 border-dashed rounded-xl p-8 text-center transition-all
-          ${
-            dragActive
-              ? 'border-purple-400 bg-purple-500/10'
-              : 'border-gray-600 hover:border-gray-500'
-          }
-          ${isProcessing ? 'opacity-50 pointer-events-none' : ''}
-        `}
+        className={`relative rounded-xl border-2 border-dashed p-8 text-center transition-all ${
+          dragActive
+            ? 'border-purple-400 bg-purple-500/10'
+            : 'border-gray-600 hover:border-gray-500'
+        } ${isProcessing ? 'pointer-events-none opacity-50' : ''} `}
         onDragEnter={handleDrag}
         onDragLeave={handleDrag}
         onDragOver={handleDrag}
@@ -104,7 +100,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
         <input
           type="file"
           id="file-upload"
-          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+          className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
           onChange={handleChange}
           disabled={isProcessing}
         />
@@ -112,20 +108,20 @@ export const FileUpload: React.FC<FileUploadProps> = ({
         <div className="flex flex-col items-center gap-4">
           {isProcessing ? (
             <>
-              <div className="animate-spin rounded-full h-12 w-12 border-2 border-purple-500 border-t-transparent" />
-              <div className="text-white font-medium">
+              <div className="h-12 w-12 animate-spin rounded-full border-2 border-purple-500 border-t-transparent" />
+              <div className="font-medium text-white">
                 Processing your file...
               </div>
-              <div className="text-gray-400 text-sm">
+              <div className="text-sm text-gray-400">
                 This may take a few moments
               </div>
             </>
           ) : (
             <>
-              <div className="p-4 bg-gray-800 rounded-full">
-                <Upload className="w-8 h-8 text-purple-400" />
+              <div className="rounded-full bg-gray-800 p-4">
+                <Upload className="h-8 w-8 text-purple-400" />
               </div>
-              <div className="text-white font-medium">
+              <div className="font-medium text-white">
                 Drop your file or Click to browse
               </div>
             </>
@@ -134,10 +130,10 @@ export const FileUpload: React.FC<FileUploadProps> = ({
       </div>
 
       {error && (
-        <div className="mt-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
+        <div className="mt-4 rounded-lg border border-red-500/20 bg-red-500/10 p-3">
           <div className="flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 text-red-400" />
-            <span className="text-red-400 text-sm">{error}</span>
+            <AlertCircle className="h-4 w-4 text-red-400" />
+            <span className="text-sm text-red-400">{error}</span>
           </div>
         </div>
       )}

@@ -94,31 +94,31 @@ export const SearchModal: React.FC<SearchModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-start justify-center pt-20">
-      <div className="w-full max-w-2xl mx-4">
-        <div className="bg-gray-900/90 backdrop-blur-sm border border-gray-700/50 rounded-2xl shadow-2xl overflow-hidden">
-          <div className="flex items-center p-4 border-b border-gray-700/50">
-            <Search className="w-5 h-5 text-gray-400 mr-3" />
+    <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 pt-20 backdrop-blur-sm">
+      <div className="mx-4 w-full max-w-2xl">
+        <div className="overflow-hidden rounded-2xl border border-gray-700/50 bg-gray-900/90 shadow-2xl backdrop-blur-sm">
+          <div className="flex items-center border-b border-gray-700/50 p-4">
+            <Search className="mr-3 h-5 w-5 text-gray-400" />
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search notes..."
-              className="flex-1 bg-transparent text-white placeholder-gray-400 outline-none text-lg"
+              className="flex-1 bg-transparent text-lg text-white placeholder-gray-400 outline-none"
               autoFocus
             />
             <button
               onClick={onClose}
-              className="p-1 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-all"
+              className="rounded p-1 text-gray-400 transition-all hover:bg-gray-700 hover:text-white"
             >
-              <X className="w-5 h-5" />
+              <X className="h-5 w-5" />
             </button>
           </div>
 
           <div className="max-h-96 overflow-auto">
             {isLoading ? (
               <div className="p-8 text-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-2 border-purple-500 border-t-transparent mx-auto mb-2" />
+                <div className="mx-auto mb-2 h-8 w-8 animate-spin rounded-full border-2 border-purple-500 border-t-transparent" />
                 <p className="text-gray-400">Searching...</p>
               </div>
             ) : results.length > 0 ? (
@@ -127,20 +127,17 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                   <button
                     key={`${result.type}-${result.id}`}
                     onClick={() => handleSelect(result)}
-                    className={`
-                      w-full flex items-center gap-3 p-4 text-left transition-all
-                      ${
-                        index === selectedIndex
-                          ? 'bg-purple-500/20 text-purple-300'
-                          : 'text-gray-300 hover:bg-gray-800/50'
-                      }
-                    `}
+                    className={`flex w-full items-center gap-3 p-4 text-left transition-all ${
+                      index === selectedIndex
+                        ? 'bg-purple-500/20 text-purple-300'
+                        : 'text-gray-300 hover:bg-gray-800/50'
+                    } `}
                   >
-                    <FileText className="w-5 h-5 flex-shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <div className="font-medium truncate">{result.title}</div>
+                    <FileText className="h-5 w-5 flex-shrink-0" />
+                    <div className="min-w-0 flex-1">
+                      <div className="truncate font-medium">{result.title}</div>
                       {result.snippet && (
-                        <div className="text-sm text-gray-400 truncate mt-1">
+                        <div className="mt-1 truncate text-sm text-gray-400">
                           {result.snippet}
                         </div>
                       )}
@@ -159,7 +156,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
             )}
           </div>
 
-          <div className="border-t border-gray-700/50 p-3 bg-gray-900/50">
+          <div className="border-t border-gray-700/50 bg-gray-900/50 p-3">
             <div className="flex items-center justify-between text-xs text-gray-400">
               <div className="flex items-center gap-4">
                 <span>↑↓ Navigate</span>

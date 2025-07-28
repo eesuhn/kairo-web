@@ -22,8 +22,8 @@ export const EntityPanel: React.FC<EntityPanelProps> = ({
     <div
       className={`${
         overlay
-          ? 'fixed right-0 z-40 shadow-2xl animate-slidein bg-gray-900/90 backdrop-blur-sm border-l border-gray-700/50 flex flex-col'
-          : 'w-80 bg-gray-900/90 backdrop-blur-sm border-l border-gray-700/50 flex flex-col'
+          ? 'animate-slidein fixed right-0 z-40 flex flex-col border-l border-gray-700/50 bg-gray-900/90 shadow-2xl backdrop-blur-sm'
+          : 'flex w-80 flex-col border-l border-gray-700/50 bg-gray-900/90 backdrop-blur-sm'
       } transition-all duration-300`}
       style={
         overlay
@@ -36,15 +36,15 @@ export const EntityPanel: React.FC<EntityPanelProps> = ({
           : {}
       }
     >
-      <div className="flex items-center justify-between p-4 border-b border-gray-700/50">
+      <div className="flex items-center justify-between border-b border-gray-700/50 p-4">
         <h3 className="text-lg font-semibold text-white">
           {getReadableEntityLabel(entityType)}
         </h3>
         <button
           onClick={onClose}
-          className="p-1 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-all"
+          className="rounded p-1 text-gray-400 transition-all hover:bg-gray-700 hover:text-white"
         >
-          <X className="w-4 h-4" />
+          <X className="h-4 w-4" />
         </button>
       </div>
 
@@ -54,18 +54,18 @@ export const EntityPanel: React.FC<EntityPanelProps> = ({
             <button
               key={note.id}
               onClick={() => onNoteSelect(note)}
-              className="w-full text-left p-3 bg-gray-800/50 hover:bg-gray-700/50 rounded-lg transition-all group"
+              className="group w-full rounded-lg bg-gray-800/50 p-3 text-left transition-all hover:bg-gray-700/50"
             >
               <div className="flex items-start gap-3">
-                <FileText className="w-4 h-4 text-gray-400 mt-1 flex-shrink-0" />
-                <div className="flex-1 min-w-0">
-                  <div className="font-medium text-white text-sm truncate group-hover:text-purple-300 transition-colors">
+                <FileText className="mt-1 h-4 w-4 flex-shrink-0 text-gray-400" />
+                <div className="min-w-0 flex-1">
+                  <div className="truncate text-sm font-medium text-white transition-colors group-hover:text-purple-300">
                     {note.title}
                   </div>
-                  <div className="text-xs text-gray-400 mt-1 line-clamp-2 text-justify">
+                  <div className="mt-1 line-clamp-2 text-justify text-xs text-gray-400">
                     {note.abstractive_summary.slice(0, 100)}...
                   </div>
-                  <div className="text-xs text-gray-500 mt-2">
+                  <div className="mt-2 text-xs text-gray-500">
                     {new Date(note.created_at).toLocaleDateString()}
                   </div>
                 </div>

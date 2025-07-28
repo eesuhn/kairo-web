@@ -248,9 +248,9 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({
   }, [adjustTextareaHeight]);
 
   return (
-    <div className="h-full flex flex-col bg-gray-950">
+    <div className="flex h-full flex-col bg-gray-950">
       <div className="flex-1 overflow-y-auto">
-        <div className="max-w-4xl mx-auto px-8 py-8 pb-16">
+        <div className="mx-auto max-w-4xl px-8 py-8 pb-16">
           <div className="mb-4 max-w-4xl">
             <textarea
               ref={titleRef}
@@ -261,18 +261,18 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({
               }}
               onBlur={handleTitleBlur}
               rows={1}
-              className="w-full text-4xl font-bold bg-transparent text-white outline-none border-none resize-none placeholder-gray-500 leading-tight break-words max-w-full"
+              className="w-full max-w-full resize-none break-words border-none bg-transparent text-4xl font-bold leading-tight text-white placeholder-gray-500 outline-none"
               placeholder="Untitled"
               style={{ overflow: 'hidden', height: 'auto' }}
             />
 
-            <div className="flex items-center gap-4 mt-6 text-sm text-gray-400">
+            <div className="mt-6 flex items-center gap-4 text-sm text-gray-400">
               <div className="flex items-center gap-2 pl-1">
-                <Calendar className="w-4 h-4" />
+                <Calendar className="h-4 w-4" />
                 <span className="font-semibold">{formattedDate}</span>
               </div>
               {note.file_info && (
-                <span className="px-2 py-1 bg-gray-700 text-gray-300 rounded-full text-xs">
+                <span className="rounded-full bg-gray-700 px-2 py-1 text-xs text-gray-300">
                   {truncateFilename(note.file_info.filename)}
                 </span>
               )}
@@ -302,7 +302,7 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({
           )}
 
           <div className="mb-8">
-            <h2 className="text-xl font-semibold text-white mb-4">
+            <h2 className="mb-4 text-xl font-semibold text-white">
               At a Glance&nbsp;&nbsp;👀
             </h2>
             {editedAbstract ? (
@@ -317,7 +317,7 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({
                   });
                 }}
                 onBlur={handleAbstractBlur}
-                className="w-full bg-transparent text-gray-200 leading-relaxed text-lg outline-none border-none focus:bg-gray-900/20 rounded-lg px-2 transition-all text-justify"
+                className="w-full rounded-lg border-none bg-transparent px-2 text-justify text-lg leading-relaxed text-gray-200 outline-none transition-all focus:bg-gray-900/20"
                 style={{ wordWrap: 'break-word', whiteSpace: 'pre-wrap' }}
               >
                 {editedAbstract}
@@ -328,17 +328,17 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({
                   setEditedAbstract(' ');
                   setTimeout(() => abstractRef.current?.focus(), 0);
                 }}
-                className="w-full bg-transparent text-gray-400 italic leading-relaxed text-lg outline-none border-none hover:bg-gray-900/20 rounded-lg px-2 transition-all text-justify cursor-text"
+                className="w-full cursor-text rounded-lg border-none bg-transparent px-2 text-justify text-lg italic leading-relaxed text-gray-400 outline-none transition-all hover:bg-gray-900/20"
               >
                 Executive summary will appear here...
               </div>
             )}
           </div>
 
-          <div className="border-t border-gray-600 my-10"></div>
+          <div className="my-10 border-t border-gray-600"></div>
 
           <div className="mb-8">
-            <h2 className="text-xl font-semibold text-white mb-4">
+            <h2 className="mb-4 text-xl font-semibold text-white">
               More Details&nbsp;&nbsp;🔖
             </h2>
             {editedExtractive ? (
@@ -353,7 +353,7 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({
                   });
                 }}
                 onBlur={handleExtractiveBlur}
-                className="w-full bg-transparent leading-relaxed text-base text-justify outline-none border-none focus:bg-gray-900/20 rounded-lg px-2 py-1 transition-all text-gray-200"
+                className="w-full rounded-lg border-none bg-transparent px-2 py-1 text-justify text-base leading-relaxed text-gray-200 outline-none transition-all focus:bg-gray-900/20"
                 style={{
                   wordWrap: 'break-word',
                   whiteSpace: 'pre-wrap',
@@ -368,7 +368,7 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({
                   setEditedExtractive(' ');
                   setTimeout(() => extractiveRef.current?.focus(), 0);
                 }}
-                className="w-full bg-transparent text-gray-400 italic leading-relaxed text-base text-justify outline-none border-none hover:bg-gray-900/20 rounded-lg px-2 py-1 transition-all cursor-text"
+                className="w-full cursor-text rounded-lg border-none bg-transparent px-2 py-1 text-justify text-base italic leading-relaxed text-gray-400 outline-none transition-all hover:bg-gray-900/20"
                 style={{
                   wordWrap: 'break-word',
                   whiteSpace: 'pre-wrap',

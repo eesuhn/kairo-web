@@ -136,12 +136,12 @@ function App() {
   useKeyboard(handleSearch);
 
   return (
-    <div className="h-screen bg-gray-950 text-white flex overflow-hidden">
+    <div className="flex h-screen overflow-hidden bg-white text-white">
       {apiStatus === 'disconnected' && (
-        <div className="absolute top-4 right-6 z-50 bg-red-500/10 border border-red-500/20 rounded-lg p-3 backdrop-blur-lg">
+        <div className="absolute right-6 top-4 z-50 rounded-lg border border-red-500/20 bg-red-500/10 p-3 backdrop-blur-lg">
           <div className="flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 text-red-400" />
-            <span className="text-red-400 text-sm font-semibold">
+            <AlertCircle className="h-4 w-4 text-red-400" />
+            <span className="text-sm font-semibold text-red-400">
               Server Disconnected
             </span>
           </div>
@@ -149,10 +149,10 @@ function App() {
       )}
 
       {error && (
-        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-50 bg-red-500/10 border border-red-500/20 rounded-lg p-3 backdrop-blur-sm">
+        <div className="absolute left-1/2 top-4 z-50 -translate-x-1/2 transform rounded-lg border border-red-500/20 bg-red-500/10 p-3 backdrop-blur-sm">
           <div className="flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 text-red-400" />
-            <span className="text-red-400 text-sm">{error}</span>
+            <AlertCircle className="h-4 w-4 text-red-400" />
+            <span className="text-sm text-red-400">{error}</span>
             <button
               onClick={() => setError(null)}
               className="ml-2 text-red-400 hover:text-red-300"
@@ -171,33 +171,30 @@ function App() {
         onSearch={handleSearch}
       />
 
-      <div className="flex-1 flex flex-col">
-        <header className="border-b border-gray-700/50 bg-gray-900/50 backdrop-blur-sm px-4 h-20 pt-5">
+      <div className="flex flex-1 flex-col">
+        <header className="h-20 px-4 pt-5 backdrop-blur-sm">
           <div className="flex items-center justify-between">
             <div />
 
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setShowVisualization(!showVisualization)}
-                className={`
-                  flex items-center gap-2 px-4 py-2 rounded-md font-medium transition-all duration-200
-                  ${
-                    showVisualization
-                      ? 'bg-white/10 text-white border border-white/20 backdrop-blur-sm shadow-lg'
-                      : 'text-gray-300 hover:text-white hover:bg-white/5 backdrop-blur-sm'
-                  }
-                `}
+                className={`flex items-center gap-2 font-medium transition-all duration-200 ${
+                  showVisualization
+                    ? 'border-b-2 border-black text-black hover:border-gray-400 hover:text-gray-400'
+                    : 'text-black backdrop-blur-sm hover:bg-white/5 hover:text-gray-400'
+                } `}
               >
-                <BarChart3 className="w-4 h-4" />
+                <BarChart3 className="h-4 w-4" />
                 Visualize
               </button>
 
               <button
                 onClick={() => setShowUploadModal(true)}
-                className="flex items-center gap-2 px-4 py-2 rounded-md font-medium transition-all duration-200 text-gray-300 hover:text-white hover:bg-white/5 backdrop-blur-sm"
+                className="flex items-center gap-2 rounded-md px-4 py-2 font-medium text-black backdrop-blur-sm transition-all duration-200 hover:bg-white/5 hover:text-gray-400"
               >
                 <svg
-                  className="w-4 h-4"
+                  className="h-4 w-4"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -213,24 +210,21 @@ function App() {
               </button>
 
               <div
-                className={`
-                w-2 h-2 rounded-full mx-4
-                ${
+                className={`mx-4 h-2 w-2 rounded-full ${
                   apiStatus === 'connected'
                     ? 'bg-green-500'
                     : apiStatus === 'disconnected'
                       ? 'bg-red-500'
                       : 'bg-yellow-500'
-                }
-              `}
+                } `}
               />
             </div>
           </div>
         </header>
 
-        <div className="flex-1 overflow-hidden min-h-0 flex relative">
+        <div className="relative flex min-h-0 flex-1 overflow-hidden">
           {showVisualization ? (
-            <div className="flex-1 h-full p-6">
+            <div className="h-full flex-1 p-6">
               <EntityVisualization
                 notes={notes}
                 onNoteSelect={handleNoteSelect}
@@ -256,12 +250,12 @@ function App() {
               )}
             </>
           ) : (
-            <div className="flex-1 h-full flex items-center justify-center">
+            <div className="flex h-full flex-1 items-center justify-center">
               <div className="text-center">
-                <h2 className="text-2xl font-bold mb-4">
+                <h2 className="mb-4 text-2xl font-bold">
                   ❒&nbsp;&nbsp;Welcome to Kairo&nbsp;&nbsp;❒
                 </h2>
-                <p className="text-gray-400 mb-8 font-semibold">
+                <p className="mb-8 font-semibold text-gray-400">
                   {notes.length > 0
                     ? 'Select a note from the sidebar to view it.'
                     : 'Upload your first document to get started.'}
