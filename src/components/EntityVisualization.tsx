@@ -290,7 +290,7 @@ export const EntityVisualization: React.FC<EntityVisualizationProps> = ({
   }
 
   return (
-    <div className="h-full w-full rounded-2xl bg-white p-2 backdrop-blur-sm">
+    <div className="h-full w-full rounded-2xl bg-white backdrop-blur-sm">
       <div className="flex h-full gap-2">
         <div className="flex-1 overflow-hidden rounded-xl bg-gray-100">
           <svg ref={svgRef} className="h-full w-full" />

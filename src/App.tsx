@@ -179,11 +179,12 @@ function App() {
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setShowVisualization(!showVisualization)}
-                className={`flex items-center gap-2 font-medium transition-all duration-200 ${
+                className={`flex items-center gap-2 border-b-2 font-medium transition-all duration-200 ${
                   showVisualization
-                    ? 'border-b-2 border-gray-700 text-black hover:border-gray-500 hover:text-gray-500'
-                    : 'text-black backdrop-blur-sm hover:bg-white/5 hover:text-gray-500'
+                    ? 'border-gray-700 text-black hover:border-gray-500 hover:text-gray-500'
+                    : 'border-transparent text-black backdrop-blur-sm hover:bg-white/5 hover:text-gray-500'
                 } `}
+                style={{ paddingBottom: '2px' }}
               >
                 <BarChart3 className="h-4 w-4" />
                 Visualize
@@ -191,7 +192,7 @@ function App() {
 
               <button
                 onClick={() => setShowUploadModal(true)}
-                className="flex items-center gap-2 rounded-md px-4 py-2 font-medium text-black backdrop-blur-sm transition-all duration-200 hover:bg-white/5 hover:text-gray-500"
+                className="flex items-center gap-2 rounded-md px-4 pb-[12px] pt-2 font-medium text-black backdrop-blur-sm transition-all duration-200 hover:bg-white/5 hover:text-gray-500"
               >
                 <svg
                   className="h-4 w-4"
@@ -210,7 +211,7 @@ function App() {
               </button>
 
               <div
-                className={`mx-4 h-2 w-2 rounded-full ${
+                className={`mx-4 mb-1 h-2 w-2 rounded-full ${
                   apiStatus === 'connected'
                     ? 'bg-green-500'
                     : apiStatus === 'disconnected'
