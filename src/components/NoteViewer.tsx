@@ -284,6 +284,7 @@ export const NoteViewer: React.FC<NoteViewerProps> = ({
               <div className="flex flex-wrap gap-2">
                 {entityTypes.map((entityType, index) => (
                   <button
+                    className="focus:outline-none"
                     key={index}
                     onClick={(e) => {
                       e.stopPropagation();

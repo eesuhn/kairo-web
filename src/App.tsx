@@ -179,7 +179,7 @@ function App() {
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setShowVisualization(!showVisualization)}
-                className={`flex items-center gap-2 border-b-2 font-medium transition-all duration-200 ${
+                className={`flex items-center gap-2 border-b-2 font-medium transition-all duration-200 focus:outline-none ${
                   showVisualization
                     ? 'border-gray-700 text-black hover:border-gray-500 hover:text-gray-500'
                     : 'border-transparent text-black backdrop-blur-sm hover:bg-white/5 hover:text-gray-500'
@@ -192,7 +192,7 @@ function App() {
 
               <button
                 onClick={() => setShowUploadModal(true)}
-                className="flex items-center gap-2 rounded-md px-4 pb-[12px] pt-2 font-medium text-black backdrop-blur-sm transition-all duration-200 hover:bg-white/5 hover:text-gray-500"
+                className="flex items-center gap-2 rounded-md px-4 pb-[12px] pt-2 font-medium text-black backdrop-blur-sm transition-all duration-200 hover:bg-white/5 hover:text-gray-500 focus:outline-none"
               >
                 <svg
                   className="h-4 w-4"
